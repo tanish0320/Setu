@@ -1,0 +1,498 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Role {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @unique
+  permissions String[]
+  users       User[]
+
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  @@map("roles")
+}
+
+model User {
+  id                    String   @id @default(uuid()) @db.Uuid
+  email                 String   @unique
+  passwordHash          String   @map("password_hash")
+  name                  String
+  roleId                String   @db.Uuid @map("role_id")
+  role                  Role     @relation(fields: [roleId], references: [id])
+  
+  isActive              Boolean  @default(true) @map("is_active")
+  mfaEnabled            Boolean  @default(false) @map("mfa_enabled")
+  mfaSecret             String?  @map("mfa_secret")
+
+  sessions              Session[]
+  refreshTokens         RefreshToken[]
+  doctor                Doctor?
+  notificationPreference NotificationPreference?
+
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+  deletedAt             DateTime? @map("deleted_at")
+
+  @@map("users")
+}
+
+model Session {
+  id           String   @id @default(uuid()) @db.Uuid
+  userId       String   @db.Uuid @map("user_id")
+  user         User     @relation(fields: [userId], references: [id])
+  token        String   @unique
+  ipAddress    String?  @map("ip_address")
+  userAgent    String?  @map("user_agent")
+  expiresAt    DateTime @map("expires_at")
+  revokedAt    DateTime? @map("revoked_at")
+
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("sessions")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("refresh_tokens")
+}
+
+model Hospital {
+  id                 String   @id @default(uuid()) @db.Uuid
+  name               String
+  shortName          String   @map("short_name")
+  address            String?
+  x                  Float
+  y                  Float
+  subscriptionStatus String   @default("active") @map("subscription_status")
+  settings           Json?    @map("settings")
+  doctors            DoctorHospitalAffiliation[]
+  appointments       Appointment[]
+  emergencies        EmergencyRequest[]
+  departments        Department[]
+
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+  deletedAt          DateTime? @map("deleted_at")
+
+  @@map("hospitals")
+}
+
+model Department {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String
+  description String?
+  status      String   @default("active")
+  hospitalId  String   @db.Uuid @map("hospital_id")
+  hospital    Hospital @relation(fields: [hospitalId], references: [id])
+  headId      String?  @db.Uuid @map("head_id")
+  head        Doctor?  @relation("DepartmentHead", fields: [headId], references: [id])
+
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  @@unique([name, hospitalId])
+  @@map("departments")
+}
+
+model Doctor {
+  id                           String   @id @default(uuid()) @db.Uuid
+  userId                       String   @unique @db.Uuid @map("user_id")
+  user                         User     @relation(fields: [userId], references: [id])
+  medicalCouncilRegistration   String?  @map("medical_council_registration")
+  specialty                    String
+  subspecialty                 String?
+  avatar                       String?
+  experience                   Int      @default(0)
+  emergencyOptIn               Boolean  @default(true) @map("emergency_opt_in")
+  travelRadius                 Int      @default(15) @map("travel_radius")
+  defaultConsultationDuration  Int      @default(30) @map("default_consultation_duration")
+  defaultBuffer                Int      @default(5) @map("default_buffer")
+  notificationPreferences      Json?    @map("notification_preferences")
+  skills                       String[]
+
+  status                       DoctorStatus?
+  hospitals                    DoctorHospitalAffiliation[]
+  appointments                 Appointment[]
+  emergencyAssignments         EmergencyAssignment[]
+  acceptedEmergencies          EmergencyRequest[] @relation("EmergencyRequestAcceptedDoctor")
+  handoffs                     PatientHandoffNote[]
+  reliabilityMetrics           ReliabilityMetric[]
+  departmentsHeaded            Department[] @relation("DepartmentHead")
+  statusHistories              DoctorStatusHistory[]
+
+  createdAt                    DateTime @default(now()) @map("created_at")
+  updatedAt                    DateTime @updatedAt @map("updated_at")
+  deletedAt                    DateTime? @map("deleted_at")
+
+  @@map("doctors")
+}
+
+model DoctorHospitalAffiliation {
+  id                 String   @id @default(uuid()) @db.Uuid
+  doctorId           String   @db.Uuid @map("doctor_id")
+  doctor             Doctor   @relation(fields: [doctorId], references: [id])
+  hospitalId         String   @db.Uuid @map("hospital_id")
+  hospital           Hospital @relation(fields: [hospitalId], references: [id])
+  isPrimary          Boolean  @default(false) @map("is_primary")
+  isActive           Boolean  @default(true) @map("is_active")
+  empanelmentDate    DateTime @default(now()) @map("empanelment_date")
+  createdBy          String?  @map("created_by")
+  availabilityWindows AvailabilityWindow[]
+
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  @@unique([doctorId, hospitalId])
+  @@map("doctor_hospital_affiliations")
+}
+
+model AvailabilityWindow {
+  id            String   @id @default(uuid()) @db.Uuid
+  affiliationId String   @db.Uuid @map("affiliation_id")
+  affiliation   DoctorHospitalAffiliation @relation(fields: [affiliationId], references: [id], onDelete: Cascade)
+  dayOfWeek     Int      @map("day_of_week") // 0 (Sunday) to 6 (Saturday)
+  startTime     String   @map("start_time") // "HH:MM" format
+  endTime       String   @map("end_time")   // "HH:MM" format
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  deletedAt     DateTime? @map("deleted_at")
+
+  @@map("availability_windows")
+}
+
+model DoctorStatus {
+  id                String   @id @default(uuid()) @db.Uuid
+  doctorId          String   @unique @db.Uuid @map("doctor_id")
+  doctor             Doctor   @relation(fields: [doctorId], references: [id])
+  status            String
+  currentHospitalId String?  @db.Uuid @map("current_hospital_id")
+  nextHospitalId    String?  @db.Uuid @map("next_hospital_id")
+  previousStatus    String?  @map("previous_status")
+  etaMinutes        Int?     @map("eta_minutes")
+  x                 Float?
+  y                 Float?
+  progress          Float    @default(0)
+
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  @@map("doctor_statuses")
+}
+
+model DoctorStatusHistory {
+  id        String   @id @default(uuid()) @db.Uuid
+  doctorId  String   @db.Uuid @map("doctor_id")
+  doctor    Doctor   @relation(fields: [doctorId], references: [id])
+  status    String
+  changedAt DateTime @default(now()) @map("changed_at")
+  reason    String?
+  actor     String   @default("system")
+
+  @@map("doctor_status_histories")
+}
+
+model StatusEvent {
+  id        String   @id @default(uuid()) @db.Uuid
+  doctorId  String   @db.Uuid @map("doctor_id")
+  eventType String   @map("event_type")
+  payload   Json
+  timestamp DateTime @default(now())
+
+  @@map("status_events")
+}
+
+model Appointment {
+  id               String   @id @default(uuid()) @db.Uuid
+  doctorId         String   @db.Uuid @map("doctor_id")
+  doctor           Doctor   @relation(fields: [doctorId], references: [id])
+  hospitalId       String   @db.Uuid @map("hospital_id")
+  hospital         Hospital @relation(fields: [hospitalId], references: [id])
+  patientName      String   @map("patient_name")
+  patientPhone     String?  @map("patient_phone")
+  patientId        String?  @map("patient_id")
+  appointmentType  String?  @map("appointment_type")
+  scheduledStart   DateTime @map("scheduled_start")
+  scheduledEnd     DateTime @map("scheduled_end")
+  actualStart      DateTime? @map("actual_start")
+  actualEnd        DateTime? @map("actual_end")
+  status           String   @default("Pending")
+  bookedBy         String?  @map("booked_by")
+  confirmedBy      String?  @map("confirmed_by")
+  notes            String?
+  conflictOverride Boolean  @default(false) @map("conflict_override")
+  overrideReason   String?  @map("override_reason")
+  
+  history          AppointmentStatusHistory[]
+
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+  deletedAt        DateTime? @map("deleted_at")
+
+  @@map("appointments")
+}
+
+model AppointmentStatusHistory {
+  id            String   @id @default(uuid()) @db.Uuid
+  appointmentId String   @db.Uuid @map("appointment_id")
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+  prevStatus    String?  @map("prev_status")
+  newStatus     String   @map("new_status")
+  actor         String
+  timestamp     DateTime @default(now())
+  reason        String?
+  hospitalId    String?  @db.Uuid @map("hospital_id")
+
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@map("appointment_status_history")
+}
+
+model EmergencyRequest {
+  id               String   @id @default(uuid()) @db.Uuid
+  hospitalId       String   @db.Uuid @map("hospital_id")
+  hospital         Hospital @relation(fields: [hospitalId], references: [id])
+  specialty        String
+  urgency          String   // e.g. "Critical", "Urgent", "Standard"
+  patientSummary   String?  @map("patient_summary")
+  status           String   @default("Searching") // Searching, Alerting, Accepted, Travelling, Completed, Expired, Cancelled
+  acceptedDoctorId String?  @db.Uuid @map("accepted_doctor_id")
+  acceptedDoctor   Doctor?  @relation("EmergencyRequestAcceptedDoctor", fields: [acceptedDoctorId], references: [id])
+  responseMode     String?  @map("response_mode") // Teleconsultation or Physical Visit
+  eta              Int?     // ETA in minutes
+  createdBy        String?  @map("created_by")
+  acceptedAt       DateTime? @map("accepted_at")
+  completedAt      DateTime? @map("completed_at")
+
+  assignments      EmergencyAssignment[]
+  escalations      EmergencyEscalationLog[]
+  timeline         EmergencyTimeline[]
+
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+  deletedAt        DateTime? @map("deleted_at")
+
+  @@map("emergency_requests")
+}
+
+model EmergencyAssignment {
+  id                 String   @id @default(uuid()) @db.Uuid
+  emergencyRequestId String   @db.Uuid @map("emergency_request_id")
+  emergencyRequest   EmergencyRequest @relation(fields: [emergencyRequestId], references: [id])
+  doctorId           String   @db.Uuid @map("doctor_id")
+  doctor             Doctor   @relation(fields: [doctorId], references: [id])
+  status             String   // e.g. Pending, Alerted, Accepted, Declined, Timeout
+  responseLatency    Float?   @map("response_latency") // in seconds
+  notifiedAt         DateTime @default(now()) @map("notified_at")
+  respondedAt        DateTime? @map("responded_at")
+
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  @@map("emergency_assignments")
+}
+
+model EmergencyEscalationLog {
+  id                 String   @id @default(uuid()) @db.Uuid
+  emergencyRequestId String   @db.Uuid @map("emergency_request_id")
+  emergencyRequest   EmergencyRequest @relation(fields: [emergencyRequestId], references: [id])
+  action             String   // e.g. Push, SMS, Voice, Escalate
+  details            String
+
+  createdAt          DateTime @default(now()) @map("created_at")
+
+  @@map("emergency_escalation_logs")
+}
+
+model EmergencyTimeline {
+  id                 String   @id @default(uuid()) @db.Uuid
+  emergencyRequestId String   @db.Uuid @map("emergency_request_id")
+  emergencyRequest   EmergencyRequest @relation(fields: [emergencyRequestId], references: [id])
+  action             String   // e.g. Created, Ranked, Notified, Timeout, Escalation, Accepted, Declined, EtaChanged, Completed, Cancelled
+  actor              String
+  details            String?
+  timestamp          DateTime @default(now())
+
+  @@map("emergency_timelines")
+}
+
+model PatientHandoffNote {
+  id             String   @id @default(uuid()) @db.Uuid
+  patientName    String   @map("patient_name")
+  age            Int
+  gender         String
+  chiefComplaint String   @map("chief_complaint")
+  diagnosis      String
+  treatment      String
+  medications    String
+  followUp       String   @map("follow_up")
+  doctorId       String   @db.Uuid @map("doctor_id")
+  doctor         Doctor   @relation(fields: [doctorId], references: [id])
+  date           String
+
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("patient_handoff_notes")
+}
+
+model NotificationQueue {
+  id          String   @id @default(uuid()) @db.Uuid
+  channel     String
+  recipient   String
+  title       String
+  content     String
+  status      String
+  sentAt      DateTime? @map("sent_at")
+
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("notification_queue")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  action    String
+  actor     String
+  role      String
+  hospital  String?
+  prevVal   String?  @map("prev_val")
+  newVal    String?  @map("new_val")
+  ip        String?
+  device    String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("audit_logs")
+}
+
+model FeatureFlags {
+  id                String   @id @default(uuid()) @db.Uuid
+  emergencyDispatch Boolean  @default(true) @map("emergency_dispatch")
+  doctorTracking    Boolean  @default(true) @map("doctor_tracking")
+  liveStatus        Boolean  @default(true) @map("live_status")
+  aiRanking         Boolean  @default(true) @map("ai_ranking")
+  reliabilityScore  Boolean  @default(true) @map("reliability_score")
+  analytics         Boolean  @default(true)
+  notifications     Boolean  @default(true)
+  maps              Boolean  @default(true)
+
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  @@map("feature_flags")
+}
+
+model ReliabilityMetric {
+  id        String   @id @default(uuid()) @db.Uuid
+  doctorId  String   @db.Uuid @map("doctor_id")
+  doctor    Doctor   @relation(fields: [doctorId], references: [id])
+  overall   Int
+  history   Int[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("reliability_metrics")
+}
+
+model TravelCache {
+  id             String   @id @default(uuid()) @db.Uuid
+  originX        Float    @map("origin_x")
+  originY        Float    @map("origin_y")
+  destinationX   Float    @map("destination_x")
+  destinationY   Float    @map("destination_y")
+  durationSecond Int      @map("duration_second")
+
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@unique([originX, originY, destinationX, destinationY])
+  @@map("travel_cache")
+}
+
+model Notification {
+  id          String   @id @default(uuid()) @db.Uuid
+  recipientId String   @db.Uuid @map("recipient_id")
+  title       String
+  content     String
+  status      String   @default("Queued") // Queued, Sending, Delivered, Failed, Retrying, Expired
+  read        Boolean  @default(false)
+  readAt      DateTime? @map("read_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  deliveries  NotificationDelivery[]
+
+  @@map("notifications")
+}
+
+model NotificationDelivery {
+  id             String   @id @default(uuid()) @db.Uuid
+  notificationId String   @db.Uuid @map("notification_id")
+  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  channel        String   // Push, SMS, Email, Voice
+  provider       String   // e.g. Mock
+  status         String   @default("Queued") // Queued, Sending, Delivered, Failed, Retrying, Expired
+  recipient      String   // token, email, or phone
+  attemptsCount  Int      @default(0) @map("attempts_count")
+  nextAttemptAt  DateTime? @map("next_attempt_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  attempts       DeliveryAttempt[]
+
+  @@map("notification_deliveries")
+}
+
+model DeliveryAttempt {
+  id         String   @id @default(uuid()) @db.Uuid
+  deliveryId String   @db.Uuid @map("delivery_id")
+  delivery   NotificationDelivery @relation(fields: [deliveryId], references: [id], onDelete: Cascade)
+  attemptedAt DateTime @default(now()) @map("attempted_at")
+  status     String   // Success, Failed
+  errorMessage String? @map("error_message")
+
+  @@map("delivery_attempts")
+}
+
+model NotificationTemplate {
+  id            String   @id @default(uuid()) @db.Uuid
+  name          String   @unique // e.g. "Appointment Reminder", "Emergency SOS", etc.
+  titleTemplate String   @map("title_template")
+  bodyTemplate  String   @map("body_template")
+  channels      String[] // channels to use e.g. ["Push", "SMS"]
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("notification_templates")
+}
+
+model NotificationPreference {
+  id                String   @id @default(uuid()) @db.Uuid
+  userId            String   @unique @db.Uuid @map("user_id")
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  channels          String[] // preferred channels
+  emergencyOverride Boolean  @default(true) @map("emergency_override")
+  quietHoursStart   String?  @map("quiet_hours_start") // "HH:MM"
+  quietHoursEnd     String?  @map("quiet_hours_end") // "HH:MM"
+  language          String   @default("en")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  @@map("notification_preferences")
+}
