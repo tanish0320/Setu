@@ -5,6 +5,7 @@ import { BarChart, ProgressRing } from './SvgCharts';
 export const RoleDashboardHospitalAdmin = () => {
   const {
     selectedHospital,
+    hospitals,
     doctors,
     appointments,
     activeSOS,

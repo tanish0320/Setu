@@ -224,6 +224,7 @@ export const AppProvider = ({ children }) => {
   const [demoStep, setDemoStep] = useState(0);
   const [demoNarrative, setDemoNarrative] = useState('');
   const [demoSpeed, setDemoSpeed] = useState(1); // Speed multiplier: 1x, 2x, 5x, 10x
+  const [demoPaused, setDemoPaused] = useState(false);
 
   // Feature Flags
   const [featureFlags, setFeatureFlags] = useState({
@@ -495,8 +496,6 @@ export const AppProvider = ({ children }) => {
 
     return () => clearTimeout(timeout);
   }, [demoActive, demoStep, demoSpeed, demoPaused]);
-
-  const [demoPaused, setDemoPaused] = useState(false);
 
   const startWowDemo = () => {
     cancelSOS();

@@ -5,6 +5,7 @@ import { SvgNetworkMap } from './SvgNetworkMap';
 export const RoleDashboardReceptionist = () => {
   const {
     selectedHospital,
+    hospitals,
     doctors,
     appointments,
     bookAppointment,
