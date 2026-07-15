@@ -394,8 +394,8 @@ export const AppProvider = ({ children }) => {
           }
           
           // Animate doctor coordinates along path
-          const docRef = current.doctor;
-          const targetH = HOSPITALS.find(h => h.id === current.hospitalId);
+          const docRef = activeSOS.doctor;
+          const targetH = HOSPITALS.find(h => h.id === activeSOS.hospitalId);
           const startH = HOSPITALS.find(h => h.id === docRef.currentHospitalId) || HOSPITALS[0];
           
           if (targetH) {
