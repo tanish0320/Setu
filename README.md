@@ -7,6 +7,28 @@
 
 ---
 
+## 📊 Live Project Status & Workspace
+
+| Parameter | Value / Metric |
+| :--- | :--- |
+| **Current Sprint** | 🏃 **Sprint 0 – Product Freeze** |
+| **Milestone Target** | 🎯 **Sprint 1 – MVP Foundation** |
+| **Workspace Progress** | 🟢 **12% Completed** (Workspace Configured & Database Ready) |
+| **Total Backlog Issues** | 📋 **52 Granular Issues** |
+| **Completed Issues** | ✅ **0 / 52** |
+| **Latest Release** | 📦 **v0.1.0-alpha** (Simulated Client Workspace) |
+| **Team Contributors** | 👥 **Warriors Team** (AMC Engineering College, Bengaluru) |
+
+### 🛠️ GitHub Scrum Workspace Config
+We have transformed this repository into a professional Jira/Linear-like workspace:
+1. **[SETU Development Project Board](https://github.com/tanish0320/Setu/projects?query=is%3Aopen)**: Tracks issues from backlog to done (`Backlog` ➔ `Ready` ➔ `In Progress` ➔ `Code Review` ➔ `Testing` ➔ `Done`).
+2. **[SETU Roadmap Project Board](https://github.com/tanish0320/Setu/projects?query=is%3Aopen)**: Groups deliverables into strategic phases (`Q3 MVP` ➔ `Hackathon` ➔ `Pilot` ➔ `Production` ➔ `Future`).
+3. **Issue templates**: Pre-configured in `.github/ISSUE_TEMPLATE/` for **Feature Requests**, **Bug Reports**, **ADRs**, **Meeting Notes**, and **Hospital Feedback**.
+4. **Milestones**: Configured as 10 distinct sprint cycles from `Sprint 0` to `Sprint 9` to track deliverables.
+
+---
+
+
 ## 📌 Problem Statement
 Emergency healthcare coordination in India is severely fragmented. When a critical situation arises (e.g., Code Blue), on-call specialist doctors are often split across multiple independent hospitals. This fragmentation leads to:
 * **Manual Outreach**: Hospital staff spending 30+ critical minutes calling around to find and verify available specialists.

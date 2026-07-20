@@ -1,0 +1,2179 @@
+{
+  "labels": [
+    { "name": "P0 - Critical", "color": "d93f0b", "description": "Critical priority blocker" },
+    { "name": "P1 - High", "color": "e99695", "description": "High priority issue" },
+    { "name": "P2 - Medium", "color": "fef2c0", "description": "Medium priority issue" },
+    { "name": "P3 - Low", "color": "c2e0c6", "description": "Low priority issue" },
+    { "name": "area: Backend", "color": "0052cc", "description": "Backend services and APIs" },
+    { "name": "area: Frontend", "color": "006b75", "description": "Frontend React interface" },
+    { "name": "area: Database", "color": "5319e7", "description": "Database schema and migrations" },
+    { "name": "area: UI", "color": "bfd4f2", "description": "User Interface components" },
+    { "name": "area: UX", "color": "bfded8", "description": "User Experience patterns" },
+    { "name": "area: API", "color": "0052cc", "description": "REST endpoints and swagger routing" },
+    { "name": "area: Calendar", "color": "d4c5f9", "description": "Scheduling grid features" },
+    { "name": "area: Doctor", "color": "c5def5", "description": "Clinician workflows" },
+    { "name": "area: Hospital", "color": "bfdadc", "description": "Hospital administration workflows" },
+    { "name": "area: Emergency", "color": "d93f0b", "description": "Critical Care Code Blue dispatch" },
+    { "name": "area: Realtime", "color": "0e8a16", "description": "Socket communication services" },
+    { "name": "area: Maps", "color": "f9d0c4", "description": "Google Maps APIs and routes" },
+    { "name": "area: Authentication", "color": "b60205", "description": "JWT authentication login" },
+    { "name": "area: Security", "color": "b60205", "description": "Data encryption and RBAC filters" },
+    { "name": "area: Documentation", "color": "006b75", "description": "System docs and onboarding guides" },
+    { "name": "area: DevOps", "color": "0052cc", "description": "Docker and deployment guides" },
+    { "name": "area: AI", "color": "6f42c1", "description": "AI models and algorithmic routing" },
+    { "name": "area: Matching Engine", "color": "6f42c1", "description": "Match logic and reliability index" },
+    { "name": "area: Notifications", "color": "fbca04", "description": "Push alerts and notification gates" },
+    { "name": "area: Hackathon", "color": "fef2c0", "description": "DevHack presentation modules" },
+    { "name": "area: Startup", "color": "c2e0c6", "description": "Commercial scaling tasks" },
+    { "name": "status: Blocked", "color": "d93f0b", "description": "Task is blocked on dependencies" },
+    { "name": "status: Ready", "color": "fbca04", "description": "Task is in the backlog, ready to start" },
+    { "name": "status: In Progress", "color": "0e8a16", "description": "Task is actively being developed" },
+    { "name": "status: Review", "color": "d4c5f9", "description": "Task is undergoing code review" },
+    { "name": "status: Testing", "color": "006b75", "description": "Task is undergoing QA or test check" },
+    { "name": "status: Done", "color": "c2e0c6", "description": "Task is completed" }
+  ],
+  "milestones": [
+    { "title": "Sprint 0 – Product Freeze", "description": "Establish MVP scopes, FRD/PRD outlines, and core architectural diagrams." },
+    { "title": "Sprint 1 – MVP Foundation", "description": "Implement authentication, RBAC authorization, and database CRUD models for Doctors & Hospitals." },
+    { "title": "Sprint 2 – Realtime Platform", "description": "Integrate Socket.io backend and client frameworks to synchronise clinician presence." },
+    { "title": "Sprint 3 – Unified Calendar", "description": "Build scheduling calendars, write operations, and overlap checking logic." },
+    { "title": "Sprint 4 – Emergency Coordination", "description": "Create Code Blue SOS alerts, automated escalations, and notification adapters." },
+    { "title": "Sprint 5 – Adaptive Matching Engine", "description": "Formulate routing scores, Google Maps integrations, and transit simulators." },
+    { "title": "Sprint 6 – UX Polish", "description": "Implement skeleton loaders, responsive screen designs, and transitions." },
+    { "title": "Sprint 7 – Judge Demo", "description": "Optimize walkthrough slides, simulation parameters, and scripts for DevHack evaluation." },
+    { "title": "Sprint 8 – Production Readiness", "description": "Configure Swagger docs, DPDP compliance logs, data encryption, and Docker." },
+    { "title": "Sprint 9 – Hospital Pilot", "description": "Deploy metrics dashboards, Google billing configurations, and ABDM/FHIR standards gateways." }
+  ],
+  "epics": [
+    {
+      "key": "EPIC-PRODUCT",
+      "title": "Epic: Product Strategy",
+      "objective": "Design system specifications, user workflows, and structural bounds for the SETU platform.",
+      "deliverables": [
+        "MoSCoW scope document",
+        "Multi-tenant PRD/FRD blueprints",
+        "Root system diagrams",
+        "Operator and clinician journey paths"
+      ],
+      "childIds": ["PRODUCT-01", "PRODUCT-02", "PRODUCT-03", "PRODUCT-04", "PRODUCT-05"],
+      "successMetrics": "Clear project documentation signed off by architectural leads, accelerating developer velocity by 30%.",
+      "progressChecklist": {
+        "Product": [
+          "Establish MVP feature boundaries",
+          "Map clinical workflows"
+        ],
+        "Documentation": [
+          "Generate PRD.md and FRD.md files",
+          "Draft sequence flow models"
+        ]
+      }
+    },
+    {
+      "key": "EPIC-DOCTOR",
+      "title": "Epic: Doctor Management",
+      "objective": "Build backend and frontend clinician administration panels, active shift trackers, and reliability calculations.",
+      "deliverables": [
+        "Doctor catalog and profiles API",
+        "Availability calendar scheduler dashboard",
+        "Clinician presence engine",
+        "Preference settings",
+        "Historical response indicators"
+      ],
+      "childIds": ["DOCTOR-01", "DOCTOR-02", "DOCTOR-03", "DOCTOR-04", "DOCTOR-05"],
+      "successMetrics": "Accurate, real-time tracking of doctor location and availability status, with status changes sync'd across dashboards in <500ms.",
+      "progressChecklist": {
+        "Backend": [
+          "Create doctors REST API",
+          "Integrate status transition methods"
+        ],
+        "Frontend": [
+          "Design profile and availability views",
+          "Render status badges"
+        ],
+        "Database": [
+          "Map Doctor and DoctorStatus models",
+          "Establish indexing lookups"
+        ]
+      }
+    },
+    {
+      "key": "EPIC-HOSPITAL",
+      "title": "Epic: Hospital Operations",
+      "objective": "Design multi-site dashboards, department care capacities, and regional coordination routing thresholds.",
+      "deliverables": [
+        "Hospital management control center",
+        "Specialty capability profiles API",
+        "Custom escalation threshold preference engine"
+      ],
+      "childIds": ["HOSPITAL-01", "HOSPITAL-02", "HOSPITAL-03"],
+      "successMetrics": "Successful multi-tenant data separation, allowing hospital admins to manage local clinics and configure escalation parameters.",
+      "progressChecklist": {
+        "Backend": [
+          "Build hospital analytics aggregation controllers",
+          "Integrate routing parameters"
+        ],
+        "Frontend": [
+          "Design multi-hospital coordinator layouts",
+          "Build preference setup forms"
+        ],
+        "Database": [
+          "Design Hospital and Department tables",
+          "Apply regional indexes"
+        ]
+      }
+    },
+    {
+      "key": "EPIC-CALENDAR",
+      "title": "Epic: Unified Calendar",
+      "objective": "Develop consolidated scheduler interfaces, calendar sync databases, travel buffer offsets, and conflict detection services.",
+      "deliverables": [
+        "Consolidated multi-site calendar interface",
+        "Calendar CRUD API",
+        "Commuter travel buffer calculations service",
+        "Database conflict check logic",
+        "Appointment lifecycle state machine"
+      ],
+      "childIds": ["CALENDAR-01", "CALENDAR-02", "CALENDAR-03", "CALENDAR-04", "CALENDAR-05"],
+      "successMetrics": "Double-bookings eliminated across the network, with travel buffers automatically injected between multi-site bookings.",
+      "progressChecklist": {
+        "Backend": [
+          "Create calendar service logic",
+          "Build overlap detection algorithms"
+        ],
+        "Frontend": [
+          "Design weekly grid displays",
+          "Implement drag-and-drop rescheduling"
+        ],
+        "Database": [
+          "Map Appointment schemas",
+          "Add overlap query indexing"
+        ]
+      }
+    },
+    {
+      "key": "EPIC-EMERGENCY",
+      "title": "Epic: Emergency Coordination",
+      "objective": "Construct emergency SOS dispatchers, automated alert check loops, consultation selectors, and pager alert triggers.",
+      "deliverables": [
+        "Code Blue SOS REST API",
+        "Cascading alert timeout escalation script",
+        "Consultation channel selector widget",
+        "Real-time dispatch status timeline UI",
+        "Notification adapters (vibration, SMS, and backup voice calls)"
+      ],
+      "childIds": ["EMERGENCY-01", "EMERGENCY-02", "EMERGENCY-03", "EMERGENCY-04", "EMERGENCY-05"],
+      "successMetrics": "Emergency response time reduced to under 5 minutes through automated dispatching, with fallback escalations triggering within 30s.",
+      "progressChecklist": {
+        "Backend": [
+          "Write SOS trigger logic",
+          "Implement escalation timer loops"
+        ],
+        "Frontend": [
+          "Design SOS trigger screens",
+          "Build live tracking timeline cards"
+        ],
+        "Database": [
+          "Design EmergencyRequest and EscalationLog models",
+          "Integrate history logs"
+        ]
+      }
+    },
+    {
+      "key": "EPIC-MATCHING",
+      "title": "Epic: Adaptive Matching Engine",
+      "objective": "Formulate multi-parameter ranking, explainability components, commute calculations, and clinical ratings.",
+      "deliverables": [
+        "Mathematical match score calculator",
+        "Explanatory match details display UI",
+        "Travel speed coordinate metrics cache",
+        "Historical clinician reliability aggregates dashboard",
+        "Board clinical experience index scoring"
+      ],
+      "childIds": ["MATCHING-01", "MATCHING-02", "MATCHING-03", "MATCHING-04", "MATCHING-05"],
+      "successMetrics": "Clinician matching recommendations calculate in under 100ms, providing operators with detailed explanations for rankings.",
+      "progressChecklist": {
+        "Backend": [
+          "Build mathematical ranking algorithms",
+          "Aggregate history metrics"
+        ],
+        "Frontend": [
+          "Design match breakdown panels",
+          "Add metrics visualization charts"
+        ],
+        "Database": [
+          "Design ReliabilityMetric tables",
+          "Optimize indexing on target parameters"
+        ]
+      }
+    },
+    {
+      "key": "EPIC-MAPS",
+      "title": "Epic: Navigation & Maps",
+      "objective": "Integrate interactive mapping libraries, calculate transit paths, and simulate coordinate progress.",
+      "deliverables": [
+        "Google Maps interface integration",
+        "Transit directions and coordinates parser",
+        "En-route telemetry mock routes generator"
+      ],
+      "childIds": ["MAPS-01", "MAPS-02", "MAPS-03"],
+      "successMetrics": "Interactive maps rendering dynamically, showing accurate coordinate updates and ETA tracking during simulated transits.",
+      "progressChecklist": {
+        "Backend": [
+          "Build route distances calculations",
+          "Integrate Directions endpoints"
+        ],
+        "Frontend": [
+          "Embed Google Maps containers",
+          "Plot tracking markers"
+        ],
+        "Database": [
+          "Map TravelCache models",
+          "Create coordinate caching methods"
+        ]
+      }
+    },
+    {
+      "key": "EPIC-REALTIME",
+      "title": "Epic: Realtime Platform",
+      "objective": "Integrate client websocket packages, build channel broadcast gateways, and connect live status updates.",
+      "deliverables": [
+        "Socket.io client context framework",
+        "Hospital specific messaging gateways",
+        "Presence synchronizers",
+        "Emergency pager broadcasts"
+      ],
+      "childIds": ["REALTIME-01", "REALTIME-02", "REALTIME-03", "REALTIME-04"],
+      "successMetrics": "Persistent websocket connections established, sync'ing status changes and alerts across endpoints in <100ms.",
+      "progressChecklist": {
+        "Backend": [
+          "Implement NestJS Socket.io Gateways",
+          "Establish rooms authorization"
+        ],
+        "Frontend": [
+          "Integrate React socket client context",
+          "Bind listeners to states"
+        ],
+        "Testing": [
+          "Verify connections recovery",
+          "Test rooms restrictions"
+        ]
+      }
+    },
+    {
+      "key": "EPIC-SECURITY",
+      "title": "Epic: Backend & Security",
+      "objective": "Build session security structures, access control guards, DPDP transaction log tables, and field encryption pipelines.",
+      "deliverables": [
+        "JWT session refresh API",
+        "RBAC check filter guard",
+        "DPDP database log interceptors",
+        "Data column encryptor"
+      ],
+      "childIds": ["SECURITY-01", "SECURITY-02", "SECURITY-03", "SECURITY-04", "SECURITY-05", "SECURITY-06", "SECURITY-07"],
+      "successMetrics": "Total data protection at rest and in transit, with all access attempts recorded in immutable audit tables.",
+      "progressChecklist": {
+        "Backend": [
+          "Implement JWT auth strategies",
+          "Build RBAC decorator checks"
+        ],
+        "Database": [
+          "Create Session and AuditLog tables",
+          "Implement column encryption hooks"
+        ],
+        "Testing": [
+          "Penetration test auth gates",
+          "Verify audit log writes"
+        ]
+      }
+    },
+    {
+      "key": "EPIC-UIUX",
+      "title": "Epic: UI / UX",
+      "objective": "Apply polished design styling, implement loading/empty UI indicators, and adjust mobile responsive layouts.",
+      "deliverables": [
+        "Glassmorphic design updates theme",
+        "State fallback layout structures",
+        "Responsive display layout optimizations"
+      ],
+      "childIds": ["UIUX-01", "UIUX-02", "UIUX-03"],
+      "successMetrics": "Aesthetically pleasing, responsive interface that loads without layout shifts and adapts smoothly to tablet and mobile screens.",
+      "progressChecklist": {
+        "Frontend": [
+          "Redesign layout styles",
+          "Build skeleton cards",
+          "Add micro-animations"
+        ],
+        "UX": [
+          "Optimize mobile navigation drawers",
+          "Integrate error boundaries"
+        ]
+      }
+    },
+    {
+      "key": "EPIC-DEMO",
+      "title": "Epic: Judge Demo",
+      "objective": "Establish presentation control consoles, narrative timeline overlays, script cards, and latency injection overrides.",
+      "deliverables": [
+        "Demo configuration panel",
+        "Walkthrough slide narratives UI",
+        "Overlay presentation notes",
+        "Processing delay filters"
+      ],
+      "childIds": ["DEMO-01", "DEMO-02", "DEMO-03", "DEMO-04"],
+      "successMetrics": "Seamless, bug-free presentation of the Code Blue workflow, allowing pitch teams to run simulations with one-click controls.",
+      "progressChecklist": {
+        "Frontend": [
+          "Build simulator console drawer",
+          "Integrate highlights filters",
+          "Apply latency overrides"
+        ],
+        "Documentation": [
+          "Compile presentation scripting",
+          "Write demo checklists"
+        ]
+      }
+    },
+    {
+      "key": "EPIC-DOCUMENTATION",
+      "title": "Epic: Documentation",
+      "objective": "Document developer workspace requirements, write swagger specifications, map database model schemas, and design production setup runbooks.",
+      "deliverables": [
+        "Root system setup guides",
+        "OpenAPI specs dashboard config",
+        "Mermaid database tables model",
+        "Docker configuration guides"
+      ],
+      "childIds": ["DOC-01", "DOC-02", "DOC-03", "DOC-04"],
+      "successMetrics": "Comprehensive documentation repository enabling fresh developers to clone, configure, and boot the application in <15 minutes.",
+      "progressChecklist": {
+        "Documentation": [
+          "Document variables",
+          "Annotate APIs DTOs",
+          "Render database diagrams"
+        ],
+        "DevOps": [
+          "Write Dockerfiles",
+          "Write Compose configurations"
+        ]
+      }
+    },
+    {
+      "key": "EPIC-STARTUP",
+      "title": "Epic: Startup Integrations",
+      "objective": "Design metrics analytics portals, layout hospital pilot onboarding playbooks, set maps cost controls, and compile ABDM/FHIR standards gateways.",
+      "deliverables": [
+        "Hospital statistics dashboard",
+        "Pilot deployment guidelines booklet",
+        "Google Maps usage controls checklist",
+        "FHIR compliance adapters blueprints"
+      ],
+      "childIds": ["STARTUP-01", "STARTUP-02", "STARTUP-03", "STARTUP-04"],
+      "successMetrics": "Commercial readiness established, with compliance documentation and pilot onboarding checklists ready for hospital deployment.",
+      "progressChecklist": {
+        "Backend": [
+          "Build metrics aggregations",
+          "Map FHIR JSON parser scripts"
+        ],
+        "Frontend": [
+          "Design executives metrics views",
+          "Integrate CSV export utilities"
+        ],
+        "Documentation": [
+          "Write pilot playbooks",
+          "Document security key setups"
+        ]
+      }
+    }
+  ],
+  "issues": [
+    {
+      "key": "PRODUCT-01",
+      "title": "Freeze MVP Scope and Icebox Secondary Roadmap Items",
+      "epicKey": "EPIC-PRODUCT",
+      "overview": "Define the boundaries of the SETU Minimum Viable Product (MVP), separating immediate features from secondary roadmap items to focus engineering resources.",
+      "problemStatement": "Unclear scope boundaries risk resource allocation issues on secondary features (e.g. built-in chat, automatic coordinate billing) rather than core matching reliability.",
+      "userStory": "As a Product Owner, I want to establish clear MVP boundaries so that the engineering team focuses on delivering a stable emergency coordination core.",
+      "technicalRequirements": [
+        "Define features matrix categorizing MVP vs Icebox items.",
+        "Update repository docs to clarify project milestones."
+      ],
+      "implementationTasks": {
+        "Product": [
+          "Draft MVP scope boundaries matrix",
+          "Map user priorities"
+        ],
+        "Documentation": [
+          "Update workspace setup notes"
+        ]
+      },
+      "acceptanceCriteria": [
+        "MVP Feature Matrix document committed to repository docs.",
+        "Board issues matching non-MVP items labeled as 'status: Blocked' or 'milestone: Sprint 9'."
+      ],
+      "dependencies": "None",
+      "priority": "P2 - Medium",
+      "labels": ["area: Startup", "area: Documentation", "status: Ready"],
+      "storyPoints": 2,
+      "milestone": "Sprint 0 – Product Freeze",
+      "estimatedTime": "8h"
+    },
+    {
+      "key": "PRODUCT-02",
+      "title": "Rewrite Product Requirement Document (PRD) for Multi-Hospital SaaS Rollout",
+      "epicKey": "EPIC-PRODUCT",
+      "overview": "Update the Product Requirements Document (PRD) to define multi-tenant scoping, operational SLAs, and DPDP compliance standards for SaaS rollout.",
+      "problemStatement": "Existing documentation lacks guidelines on data privacy boundaries, multi-tenant isolation, and response time SLAs.",
+      "userStory": "As an Engineering Manager, I want a detailed PRD to align architecture designs with clinical compliance and customer SLAs.",
+      "technicalRequirements": [
+        "Document user persona specifications (Doctor, Admin, Coordinator).",
+        "Detail privacy and multi-tenancy requirements.",
+        "Outline SLA limits for emergency dispatches."
+      ],
+      "implementationTasks": {
+        "Product": [
+          "Draft multi-tenant SLA parameters",
+          "Map data accessibility levels"
+        ],
+        "Documentation": [
+          "Commit updated PRD to docs/PRD.md"
+        ]
+      },
+      "acceptanceCriteria": [
+        "PRD document pushed to repository.",
+        "Document includes sections covering multi-tenant boundaries and DPDP rules."
+      ],
+      "dependencies": "PRODUCT-01",
+      "priority": "P2 - Medium",
+      "labels": ["area: Startup", "area: Documentation", "status: Ready"],
+      "storyPoints": 3,
+      "milestone": "Sprint 0 – Product Freeze",
+      "estimatedTime": "16h"
+    },
+    {
+      "key": "PRODUCT-03",
+      "title": "Rewrite Functional Requirements Document (FRD) for Multi-Tenant Gateway",
+      "epicKey": "EPIC-PRODUCT",
+      "overview": "Draft the Functional Requirements Document (FRD) to map database schemas, api patterns, and state transitions for the coordination platform.",
+      "problemStatement": "Lack of functional specifications leads to misalignment between backend services and client layouts.",
+      "userStory": "As a Software Engineer, I want detailed functional requirements so that I can implement database structures and endpoints accurately.",
+      "technicalRequirements": [
+        "Map state-machine transitions for emergencies and appointments.",
+        "Define input/output validation constraints for core REST APIs."
+      ],
+      "implementationTasks": {
+        "Product": [
+          "Map emergency request lifecycle states",
+          "Define validation rules"
+        ],
+        "Documentation": [
+          "Commit functional specs to docs/FRD.md"
+        ]
+      },
+      "acceptanceCriteria": [
+        "FRD document detailing all state transitions committed to repository.",
+        "Validation parameters specified for all primary API models."
+      ],
+      "dependencies": "PRODUCT-02",
+      "priority": "P2 - Medium",
+      "labels": ["area: Documentation", "status: Ready"],
+      "storyPoints": 3,
+      "milestone": "Sprint 0 – Product Freeze",
+      "estimatedTime": "16h"
+    },
+    {
+      "key": "PRODUCT-04",
+      "title": "Design System Architecture and Data Flow Models",
+      "epicKey": "EPIC-PRODUCT",
+      "overview": "Create architectural blueprints mapping frontend React clients, NestJS gateways, PostgreSQL tables, and cron handlers.",
+      "problemStatement": "Lack of architectural diagrams increases developer onboarding times and risks integration mismatches.",
+      "userStory": "As a System Architect, I want to design data pathways and system components so that engineers align development tasks.",
+      "technicalRequirements": [
+        "Design sequence diagrams for emergency triggers and routing steps.",
+        "Map coordinate data paths across Socket.io channels."
+      ],
+      "implementationTasks": {
+        "Product": [
+          "Draft system sequence flows",
+          "Map caching boundaries"
+        ],
+        "Documentation": [
+          "Embed Mermaid architecture charts in README.md"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Architecture diagrams committed to project README.",
+        "Data sequence models map backend routing steps accurately."
+      ],
+      "dependencies": "PRODUCT-03",
+      "priority": "P1 - High",
+      "labels": ["area: Documentation", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 0 – Product Freeze",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "PRODUCT-05",
+      "title": "Map Cross-Hospital Emergency User Journeys",
+      "epicKey": "EPIC-PRODUCT",
+      "overview": "Map step-by-step user journeys for hospital operators and en-route clinicians to guide layout designs.",
+      "problemStatement": "Confusing UI layouts or excessive click paths can cause critical coordination delays during emergencies.",
+      "userStory": "As a UX Designer, I want to map step sequences from alerts to arrivals to design fast, clear interfaces.",
+      "technicalRequirements": [
+        "Design flow maps for coordinators triggering SOS alerts.",
+        "Design mobile notification paths for specialists accepting dispatches."
+      ],
+      "implementationTasks": {
+        "UX": [
+          "Map operator click sequences",
+          "Map specialist notification responses"
+        ],
+        "Documentation": [
+          "Commit journey charts to docs/user_journeys.md"
+        ]
+      },
+      "acceptanceCriteria": [
+        "User journey blueprints committed to project documentation.",
+        "Workflows enforce maximum-click rules for triggering SOS alerts."
+      ],
+      "dependencies": "PRODUCT-02",
+      "priority": "P2 - Medium",
+      "labels": ["area: UX", "area: UI", "status: Ready"],
+      "storyPoints": 3,
+      "milestone": "Sprint 0 – Product Freeze",
+      "estimatedTime": "16h"
+    },
+    {
+      "key": "DOCTOR-01",
+      "title": "Implement Doctor Profile Management System",
+      "epicKey": "EPIC-DOCTOR",
+      "overview": "Create APIs and database models to store doctor metadata, clinical qualifications, and hospital affiliations.",
+      "problemStatement": "Outdated clinician catalogs can lead to incorrect dispatches during medical emergencies.",
+      "userStory": "As a Doctor, I want to manage my profile data and hospital affiliations so that the system routes dispatches correctly.",
+      "technicalRequirements": [
+        "Establish Prisma model schemas mapping Doctor and DoctorHospitalAffiliation tables.",
+        "Build REST API endpoints (GET, POST, PUT) for doctor profiles."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Create Doctor and Affiliation tables",
+          "Index specialty lookups"
+        ],
+        "Backend": [
+          "Build doctor controller and services in NestJS",
+          "Write profile validation DTOs"
+        ],
+        "Frontend": [
+          "Connect profile views to backend APIs",
+          "Add profile edit forms"
+        ]
+      },
+      "acceptanceCriteria": [
+        "CRUD APIs function and validation filters enforce schema requirements.",
+        "Frontend profile screen displays and updates database records."
+      ],
+      "dependencies": "PRODUCT-04",
+      "priority": "P1 - High",
+      "labels": ["area: Doctor", "area: Backend", "area: Frontend", "area: Database", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 1 – MVP Foundation",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "DOCTOR-02",
+      "title": "Build Doctor Shift and Availabilities Dashboard",
+      "epicKey": "EPIC-DOCTOR",
+      "overview": "Build backend and frontend scheduling modules to manage recurring shifts and availability windows across multiple hospital locations.",
+      "problemStatement": "Lack of centralized availability schedules leads to scheduling overlaps and conflicts.",
+      "userStory": "As a Doctor, I want to define my active shift windows across multiple clinics to avoid double-bookings.",
+      "technicalRequirements": [
+        "Design AvailabilityWindow database schemas.",
+        "Implement CRUD endpoints for scheduling shift blocks."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Create AvailabilityWindow schemas with recurrence rules"
+        ],
+        "Backend": [
+          "Build availability endpoints in NestJS",
+          "Add checks to prevent overlapping availability records"
+        ],
+        "Frontend": [
+          "Connect calendar inputs to availability APIs",
+          "Render availability blocks on calendar grids"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Clinicians can save recurring availability windows.",
+        "System rejects overlapping availability records for different locations."
+      ],
+      "dependencies": "DOCTOR-01",
+      "priority": "P1 - High",
+      "labels": ["area: Doctor", "area: Calendar", "area: Backend", "area: Frontend", "area: Database", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 1 – MVP Foundation",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "DOCTOR-03",
+      "title": "Implement Doctor Status Engine",
+      "epicKey": "EPIC-DOCTOR",
+      "overview": "Create a real-time state machine to manage doctor statuses (AVAILABLE, BUSY, IN_TRANSIT, OFF_DUTY).",
+      "problemStatement": "Lack of real-time status tracking can route emergency alerts to doctors active in surgeries.",
+      "userStory": "As an Operator, I want to see the real-time availability status of specialists so that I can dispatch emergencies accurately.",
+      "technicalRequirements": [
+        "Create DoctorStatus tables and history logging models in database.",
+        "Build endpoints to update status and validate transitions."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Design DoctorStatus and DoctorStatusHistory tables"
+        ],
+        "Backend": [
+          "Build status controllers and update routes",
+          "Enforce transition rules in services"
+        ],
+        "Frontend": [
+          "Hook status toggles to APIs",
+          "Render status badges dynamically"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Doctor status transitions function correctly in database.",
+        "Status changes log to history tables with accurate timestamps."
+      ],
+      "dependencies": "DOCTOR-01",
+      "priority": "P0 - Critical",
+      "labels": ["area: Doctor", "area: Backend", "area: Database", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 1 – MVP Foundation",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "DOCTOR-04",
+      "title": "Build Doctor Consultation Preference and Mode Selection",
+      "epicKey": "EPIC-DOCTOR",
+      "overview": "Implement consultation preference configs allowing specialists to specify physical, online, or hybrid modes.",
+      "problemStatement": "Booking physical consultations with online-only doctors leads to scheduling conflicts.",
+      "userStory": "As a Doctor, I want to define my preferred consultation modes so that I am matched only to compatible requests.",
+      "technicalRequirements": [
+        "Extend Doctor models to store consultation preferences.",
+        "Filter clinician matches based on preference parameters."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Add consultationMode columns to Doctor models"
+        ],
+        "Backend": [
+          "Build endpoints to update consultation mode configurations",
+          "Update matching queries to filter by preferences"
+        ],
+        "Frontend": [
+          "Add preference inputs to clinician dashboard views"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Clinicians can configure preferences on profiles.",
+        "Matching algorithms filter out doctors with incompatible preferences."
+      ],
+      "dependencies": "DOCTOR-02",
+      "priority": "P1 - High",
+      "labels": ["area: Doctor", "area: Calendar", "area: Backend", "status: Ready"],
+      "storyPoints": 3,
+      "milestone": "Sprint 1 – MVP Foundation",
+      "estimatedTime": "16h"
+    },
+    {
+      "key": "DOCTOR-05",
+      "title": "Formulate Doctor Reliability and Past Response Tracking",
+      "epicKey": "EPIC-DOCTOR",
+      "overview": "Develop database schemas and transaction listeners to calculate response times and acceptance rates.",
+      "problemStatement": "Dispatching emergency alerts to doctors with history of late arrivals delays response times.",
+      "userStory": "As an Administrator, I want to track doctor reliability metrics to prioritize responsive specialists.",
+      "technicalRequirements": [
+        "Design ReliabilityMetric tables mapping average response times.",
+        "Calculate metrics based on emergency logs."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Design ReliabilityMetric tables",
+          "Index clinician lookups"
+        ],
+        "Backend": [
+          "Build cron schedulers to update reliability scores",
+          "Integrate calculations with dispatch logs"
+        ],
+        "Frontend": [
+          "Render reliability metrics on matching cards"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Reliability scores update automatically based on dispatch outcomes.",
+        "Metrics render correctly on doctor dashboard screens."
+      ],
+      "dependencies": "DOCTOR-03",
+      "priority": "P1 - High",
+      "labels": ["area: Doctor", "area: Matching Engine", "area: Backend", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 1 – MVP Foundation",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "HOSPITAL-01",
+      "title": "Build Multi-Hospital Administrative Dashboard",
+      "epicKey": "EPIC-HOSPITAL",
+      "overview": "Develop central dashboards for administrators to view active emergency dispatches and check-in metrics.",
+      "problemStatement": "Managing operations across branches without a unified dashboard causes coordination delays.",
+      "userStory": "As a Hospital Administrator, I want a consolidated metrics dashboard to monitor active emergencies across branches.",
+      "technicalRequirements": [
+        "Build endpoints returning hospital KPIs.",
+        "Embed emergency timelines and clinician status logs."
+      ],
+      "implementationTasks": {
+        "Backend": [
+          "Build dashboard summary endpoints in NestJS",
+          "Apply multi-tenant resource filters"
+        ],
+        "Frontend": [
+          "Design hospital dashboard layouts",
+          "Hook KPI cards to APIs"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Dashboard displays real-time metrics for affiliated branches.",
+        "Unauthorized users are blocked from viewing other hospital dashboards."
+      ],
+      "dependencies": "PRODUCT-04",
+      "priority": "P1 - High",
+      "labels": ["area: Hospital", "area: Frontend", "area: UI", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 1 – MVP Foundation",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "HOSPITAL-02",
+      "title": "Define Hospital Care Profiles and Department Metadata",
+      "epicKey": "EPIC-HOSPITAL",
+      "overview": "Implement capabilities database configurations to map specialized departments (ICU, Trauma, Cardiac).",
+      "problemStatement": "Routing critical cases to branches lacking appropriate equipment or beds causes patient transfers.",
+      "userStory": "As a Coordinator, I want to check department capacities before routing patients to avoid transfer delays.",
+      "technicalRequirements": [
+        "Design Hospital and Department tables mapping capabilities.",
+        "Create endpoints to manage and update care profiles."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Create Department models and indexes"
+        ],
+        "Backend": [
+          "Build CRUD endpoints for department profiles",
+          "Filter branches based on capabilities"
+        ],
+        "Frontend": [
+          "Add department controls to settings views"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Department profiles map capabilities accurately in database.",
+        "Routing engine filters out clinics lacking specialized departments."
+      ],
+      "dependencies": "HOSPITAL-01",
+      "priority": "P2 - Medium",
+      "labels": ["area: Hospital", "area: Backend", "area: Database", "status: Ready"],
+      "storyPoints": 3,
+      "milestone": "Sprint 1 – MVP Foundation",
+      "estimatedTime": "16h"
+    },
+    {
+      "key": "HOSPITAL-03",
+      "title": "Implement Hospital Preference and Coordination Engine",
+      "epicKey": "EPIC-HOSPITAL",
+      "overview": "Develop preference engines allowing branches to customize escalation thresholds and partner lists.",
+      "problemStatement": "Rigid routing paths that ignore hospital networks cause administrative bottlenecks.",
+      "userStory": "As an Admin, I want to configure custom escalation rules to align dispatches with local workflows.",
+      "technicalRequirements": [
+        "Design database schemas for hospital preferences.",
+        "Update escalation logic to check branch configurations."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Create HospitalPreference tables"
+        ],
+        "Backend": [
+          "Build update endpoints for preferences",
+          "Update escalation tasks to check custom thresholds"
+        ],
+        "Frontend": [
+          "Design preference controls in branch settings"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Branch preferences save and update correctly in database.",
+        "Escalation timers adjust automatically based on branch configurations."
+      ],
+      "dependencies": "HOSPITAL-02",
+      "priority": "P2 - Medium",
+      "labels": ["area: Hospital", "area: Backend", "status: Ready"],
+      "storyPoints": 3,
+      "milestone": "Sprint 1 – MVP Foundation",
+      "estimatedTime": "16h"
+    },
+    {
+      "key": "CALENDAR-01",
+      "title": "Develop Unified Multi-Hospital Calendar UI",
+      "epicKey": "EPIC-CALENDAR",
+      "overview": "Build interactive grid displays showing clinician schedules and availability blocks across hospital locations.",
+      "problemStatement": "Reviewing clinician schedules across separate systems causes planning errors.",
+      "userStory": "As a Doctor, I want a unified calendar showing my shifts across sites to prevent scheduling overlaps.",
+      "technicalRequirements": [
+        "Build daily and weekly CSS Grid calendar components.",
+        "Color-code blocks based on location IDs."
+      ],
+      "implementationTasks": {
+        "Frontend": [
+          "Refactor calendar pages to load dynamic data",
+          "Implement color-coding and layout grids",
+          "Add drag-and-drop actions"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Calendar dashboard renders schedules from all affiliated branches.",
+        "Color-coding distinguishes different locations clearly."
+      ],
+      "dependencies": "PRODUCT-05",
+      "priority": "P1 - High",
+      "labels": ["area: Calendar", "area: Frontend", "area: UI", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 3 – Unified Calendar",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "CALENDAR-02",
+      "title": "Implement Calendar Backend APIs and Write Actions",
+      "epicKey": "EPIC-CALENDAR",
+      "overview": "Build calendar CRUD APIs to manage appointments, check-ins, and cancellations.",
+      "problemStatement": "Lack of synchronized scheduling databases leads to mismatched schedules.",
+      "userStory": "As a Coordinator, I want to book, edit, and cancel appointments using secure APIs.",
+      "technicalRequirements": [
+        "Build CRUD endpoints (GET, POST, PUT, DELETE) for appointments.",
+        "Implement request validation schemas for date ranges."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Verify Appointment schema relations"
+        ],
+        "Backend": [
+          "Build appointments controller and services in NestJS",
+          "Write validation DTOs"
+        ],
+        "Frontend": [
+          "Hook scheduler actions to backend APIs"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend APIs process CRUD operations successfully.",
+        "Payload validation blocks invalid input ranges."
+      ],
+      "dependencies": "CALENDAR-01",
+      "priority": "P0 - Critical",
+      "labels": ["area: Calendar", "area: Backend", "area: API", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 3 – Unified Calendar",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "CALENDAR-03",
+      "title": "Build Travel Buffer Calculation Service",
+      "epicKey": "EPIC-CALENDAR",
+      "overview": "Develop distance services to calculate and inject travel buffer windows between appointments.",
+      "problemStatement": "Scheduling back-to-back appointments at different sites causes tardiness.",
+      "userStory": "As a Scheduler, I want transit buffers added between bookings to give doctors commute time.",
+      "technicalRequirements": [
+        "Calculate transit offsets based on travel distances.",
+        "Incorporate buffers into scheduling validation checks."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Create caches to store transit parameters"
+        ],
+        "Backend": [
+          "Build transit buffer calculations in services",
+          "Add checks to block appointments violating buffer limits"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Transit buffers are calculated correctly based on distances.",
+        "Scheduler blocks bookings that violate transit buffers."
+      ],
+      "dependencies": "CALENDAR-02",
+      "priority": "P1 - High",
+      "labels": ["area: Calendar", "area: Maps", "area: Backend", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 3 – Unified Calendar",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "CALENDAR-04",
+      "title": "Implement Realtime Conflict and Overlap Detection",
+      "epicKey": "EPIC-CALENDAR",
+      "overview": "Create validation systems to detect scheduling conflicts and double-bookings across branches.",
+      "problemStatement": "Lack of real-time conflict checking results in scheduling overlaps.",
+      "userStory": "As a Coordinator, I want to be alerted of scheduling conflicts immediately to avoid overlapping bookings.",
+      "technicalRequirements": [
+        "Build logic to detect overlapping intervals in PostgreSQL.",
+        "Throw custom exceptions on conflict detection."
+      ],
+      "implementationTasks": {
+        "Backend": [
+          "Build conflict detection check logic",
+          "Integrate validation with scheduling APIs"
+        ],
+        "Frontend": [
+          "Render conflict warning messages in UI"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Conflict engine blocks overlapping appointments.",
+        "Warning details include times and locations of conflicts."
+      ],
+      "dependencies": "CALENDAR-03",
+      "priority": "P0 - Critical",
+      "labels": ["area: Calendar", "area: Backend", "status: Ready"],
+      "storyPoints": 8,
+      "milestone": "Sprint 3 – Unified Calendar",
+      "estimatedTime": "40h"
+    },
+    {
+      "key": "CALENDAR-05",
+      "title": "Build Appointment Management and Status Lifecycle System",
+      "epicKey": "EPIC-CALENDAR",
+      "overview": "Implement appointment lifecycle management and status logging systems.",
+      "problemStatement": "Unverified appointment statuses make it difficult to track patient throughput.",
+      "userStory": "As a Coordinator, I want to track appointment statuses (Check-In, Complete) to coordinate workflows.",
+      "technicalRequirements": [
+        "Build state transition engines for statuses.",
+        "Log changes to AppointmentStatusHistory."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Design status logs and history tables"
+        ],
+        "Backend": [
+          "Build status update APIs and validation rules"
+        ],
+        "Frontend": [
+          "Add status controls to clinician calendars"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Appointment status changes complete successfully in database.",
+        "Transition history is logged accurately."
+      ],
+      "dependencies": "CALENDAR-04",
+      "priority": "P2 - Medium",
+      "labels": ["area: Calendar", "area: Backend", "status: Ready"],
+      "storyPoints": 3,
+      "milestone": "Sprint 3 – Unified Calendar",
+      "estimatedTime": "16h"
+    },
+    {
+      "key": "EMERGENCY-01",
+      "title": "Build Core SOS Workflow",
+      "epicKey": "EPIC-EMERGENCY",
+      "overview": "Build emergency trigger endpoints to start clinician searches and log incidents.",
+      "problemStatement": "Manual clinician searches during emergencies delay response times.",
+      "userStory": "As a Coordinator, I want a one-click emergency trigger to automate candidate searches.",
+      "technicalRequirements": [
+        "Create POST /emergencies/trigger API endpoint.",
+        "Trigger search processes and save to EmergencyRequest."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Verify EmergencyRequest table structures"
+        ],
+        "Backend": [
+          "Build emergency trigger controller and services",
+          "Integrate search algorithms with triggers"
+        ],
+        "Frontend": [
+          "Hook SOS buttons to triggers API"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Triggering SOS creates emergency records in database.",
+        "Endpoints return ranked candidate lists."
+      ],
+      "dependencies": "PRODUCT-04",
+      "priority": "P0 - Critical",
+      "labels": ["area: Emergency", "area: Backend", "area: Frontend", "status: Ready"],
+      "storyPoints": 8,
+      "milestone": "Sprint 4 – Emergency Coordination",
+      "estimatedTime": "40h"
+    },
+    {
+      "key": "EMERGENCY-02",
+      "title": "Implement Cascading Alert Escalation Engine",
+      "epicKey": "EPIC-EMERGENCY",
+      "overview": "Build automated escalation systems to reroute emergency alerts if unanswered within timeouts.",
+      "problemStatement": "Emergency dispatches stall if primary candidates fail to respond quickly.",
+      "userStory": "As an Admin, I want alerts escalated automatically to keep dispatches moving.",
+      "technicalRequirements": [
+        "Develop escalation checks in services.",
+        "Log escalation history to EmergencyEscalationLog."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Design EscalationLog tables"
+        ],
+        "Backend": [
+          "Build check loops for open dispatches",
+          "Implement rerouting tasks"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Alerts escalate to next candidates upon timeout limits.",
+        "Escalation details are logged to database tables."
+      ],
+      "dependencies": "EMERGENCY-01",
+      "priority": "P0 - Critical",
+      "labels": ["area: Emergency", "area: Backend", "status: Ready"],
+      "storyPoints": 8,
+      "milestone": "Sprint 4 – Emergency Coordination",
+      "estimatedTime": "40h"
+    },
+    {
+      "key": "EMERGENCY-03",
+      "title": "Build Emergency Consultation Type Selector",
+      "epicKey": "EPIC-EMERGENCY",
+      "overview": "Implement consultation type selections during emergency triggers.",
+      "problemStatement": "Routing physical dispatches for cases resolvable via video consults wastes resources.",
+      "userStory": "As a Coordinator, I want to choose between Physical and Online dispatches to match patient needs.",
+      "technicalRequirements": [
+        "Add consultationType options to triggers.",
+        "Filter candidate lists based on preference matches."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Add consultationType to EmergencyRequest tables"
+        ],
+        "Backend": [
+          "Update matching filters in services"
+        ],
+        "Frontend": [
+          "Add selector inputs to SOS trigger views"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Coordinators can select consultation types during triggers.",
+        "Matching algorithms filter candidates based on preferred modes."
+      ],
+      "dependencies": "EMERGENCY-01",
+      "priority": "P2 - Medium",
+      "labels": ["area: Emergency", "area: Frontend", "area: UI", "status: Ready"],
+      "storyPoints": 3,
+      "milestone": "Sprint 4 – Emergency Coordination",
+      "estimatedTime": "16h"
+    },
+    {
+      "key": "EMERGENCY-04",
+      "title": "Create Realtime Emergency Dispatch Timeline UI",
+      "epicKey": "EPIC-EMERGENCY",
+      "overview": "Develop timeline interfaces to monitor dispatch events in real time.",
+      "problemStatement": "Lack of visibility on dispatch statuses makes it difficult to coordinate clinical teams.",
+      "userStory": "As a Coordinator, I want to monitor dispatch progress on a timeline to prepare trauma teams.",
+      "technicalRequirements": [
+        "Build timeline components displaying dispatch events.",
+        "Sync updates using WebSockets."
+      ],
+      "implementationTasks": {
+        "Backend": [
+          "Build endpoints to fetch timeline details"
+        ],
+        "Frontend": [
+          "Design timeline views",
+          "Sync timeline cards to WebSocket channels"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Timeline details update dynamically in real time.",
+        "Timelines display correct event logs."
+      ],
+      "dependencies": "EMERGENCY-01",
+      "priority": "P1 - High",
+      "labels": ["area: Emergency", "area: Frontend", "area: UI", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 4 – Emergency Coordination",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "EMERGENCY-05",
+      "title": "Integrate Emergency Notifications",
+      "epicKey": "EPIC-EMERGENCY",
+      "overview": "Integrate SMS, voice, and push notification gateways to alert clinicians.",
+      "problemStatement": "Lack of external notification alerts risks delays in critical dispatches.",
+      "userStory": "As a Clinician, I want to receive push and backup SMS alerts so that I don't miss dispatches.",
+      "technicalRequirements": [
+        "Integrate Twilio SMS, Voice, and FCM push notifications.",
+        "Queue notification alerts to handle API delays."
+      ],
+      "implementationTasks": {
+        "Backend": [
+          "Build notification adapters",
+          "Replace console mocks with API calls"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Primary dispatches trigger push notifications.",
+        "Backup SMS and voice alerts trigger upon timeouts."
+      ],
+      "dependencies": "EMERGENCY-01",
+      "priority": "P1 - High",
+      "labels": ["area: Emergency", "area: Notifications", "area: Backend", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 4 – Emergency Coordination",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "MATCHING-01",
+      "title": "Formulate Adaptive Specialist Match Score Formula",
+      "epicKey": "EPIC-MATCHING",
+      "overview": "Implement scoring algorithms using availability, distance, reliability, and workload parameters.",
+      "problemStatement": "Manual or static candidate choices fail to prioritize the most effective responders.",
+      "userStory": "As a Coordinator, I want dynamically calculated candidate matches to page the best responder.",
+      "technicalRequirements": [
+        "Build mathematical algorithms in backend services.",
+        "Query status, travel buffers, and reliability metrics."
+      ],
+      "implementationTasks": {
+        "Backend": [
+          "Build candidate matching calculations",
+          "Apply weighting parameters"
+        ]
+      },
+      "acceptanceCriteria": [
+        "System calculates match scores dynamically.",
+        "Candidate lists are returned in descending score order."
+      ],
+      "dependencies": "PRODUCT-04",
+      "priority": "P0 - Critical",
+      "labels": ["area: Matching Engine", "area: Backend", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 5 – Adaptive Matching Engine",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "MATCHING-02",
+      "title": "Build Explainable Match Recommendation UI Card",
+      "epicKey": "EPIC-MATCHING",
+      "overview": "Develop visual explanations showing score breakdowns on candidate cards.",
+      "problemStatement": "Opaque recommendations cause coordinators to select candidates manually.",
+      "userStory": "As a Coordinator, I want to review score breakdowns to understand candidate selections.",
+      "technicalRequirements": [
+        "Expose detailed parameter scores in API models.",
+        "Render progress bars displaying parameter contributions."
+      ],
+      "implementationTasks": {
+        "Backend": [
+          "Update matching APIs to return parameter breakdowns"
+        ],
+        "Frontend": [
+          "Design match card details",
+          "Hook breakdown widgets to APIs"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Match cards display parameter breakdowns clearly.",
+        "Explanation text updates dynamically."
+      ],
+      "dependencies": "MATCHING-01",
+      "priority": "P2 - Medium",
+      "labels": ["area: Matching Engine", "area: UX", "area: Frontend", "status: Ready"],
+      "storyPoints": 3,
+      "milestone": "Sprint 5 – Adaptive Matching Engine",
+      "estimatedTime": "16h"
+    },
+    {
+      "key": "MATCHING-03",
+      "title": "Implement Route Distance and Coordinate ETA Calculations",
+      "epicKey": "EPIC-MATCHING",
+      "overview": "Implement spatial distance check queries and route caching to estimate transit times.",
+      "problemStatement": "Euclidean estimations fail to account for routing layouts, leading to inaccurate ETAs.",
+      "userStory": "As a Coordinator, I want transit ETAs calculated using real route networks to prepare staff.",
+      "technicalRequirements": [
+        "Build calculations based on routing coordinates.",
+        "Cache query calculations to reduce database load."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Create caches to store transit details"
+        ],
+        "Backend": [
+          "Build transit calculation routes",
+          "Integrate calculations with routing databases"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Transit calculations return accurate estimates.",
+        "Calculated coordinates check functions successfully."
+      ],
+      "dependencies": "MATCHING-01",
+      "priority": "P1 - High",
+      "labels": ["area: Matching Engine", "area: Maps", "area: Backend", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 5 – Adaptive Matching Engine",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "MATCHING-04",
+      "title": "Implement Historical Reliability Aggregator",
+      "epicKey": "EPIC-MATCHING",
+      "overview": "Develop background tasks to compile past response times and update scores.",
+      "problemStatement": "Static metrics fail to reflect recent performance changes.",
+      "userStory": "As an Admin, I want reliability metrics updated automatically to reflect recent dispatches.",
+      "technicalRequirements": [
+        "Query logs to calculate average response times.",
+        "Save updated metrics to database records."
+      ],
+      "implementationTasks": {
+        "Backend": [
+          "Build aggregations services",
+          "Schedule tasks to update metrics nightly"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Aggregations process historical logs correctly.",
+        "Scores save dynamically to database tables."
+      ],
+      "dependencies": "MATCHING-01",
+      "priority": "P1 - High",
+      "labels": ["area: Matching Engine", "area: Backend", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 5 – Adaptive Matching Engine",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "MATCHING-05",
+      "title": "Build Doctor Clinical Experience Index Scoring",
+      "epicKey": "EPIC-MATCHING",
+      "overview": "Factor clinician experience levels and certifications into match scores.",
+      "problemStatement": "Matching complex cases to junior responders risks treatment delays.",
+      "userStory": "As a Coordinator, I want senior specialists prioritized for complex cases.",
+      "technicalRequirements": [
+        "Include experience metrics in ranking formulas.",
+        "Render clinical experience details on cards."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Add experience columns to Doctor tables"
+        ],
+        "Backend": [
+          "Update score calculations in services"
+        ],
+        "Frontend": [
+          "Render experience details on cards"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Database supports experience details.",
+        "Ranking calculations prioritize senior clinicians for critical cases."
+      ],
+      "dependencies": "MATCHING-01",
+      "priority": "P2 - Medium",
+      "labels": ["area: Matching Engine", "area: Backend", "status: Ready"],
+      "storyPoints": 3,
+      "milestone": "Sprint 5 – Adaptive Matching Engine",
+      "estimatedTime": "16h"
+    },
+    {
+      "key": "MAPS-01",
+      "title": "Integrate Google Maps JS API for Live Dispatch Tracking",
+      "epicKey": "EPIC-MAPS",
+      "overview": "Integrate maps displays into dashboard portals using Google Maps Javascript APIs.",
+      "problemStatement": "Static maps fail to show active transits or routes.",
+      "userStory": "As a Coordinator, I want an interactive map display to track en-route doctors.",
+      "technicalRequirements": [
+        "Load Google Maps APIs securely.",
+        "Plot markers for hospital and doctor locations."
+      ],
+      "implementationTasks": {
+        "Frontend": [
+          "Install maps library dependencies",
+          "Replace mockup containers with map layouts",
+          "Plot markers for active locations"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Interactive map renders within dashboard layouts.",
+        "Markers map correctly to coordinates."
+      ],
+      "dependencies": "PRODUCT-05",
+      "priority": "P1 - High",
+      "labels": ["area: Maps", "area: Frontend", "area: UI", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 5 – Adaptive Matching Engine",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "MAPS-02",
+      "title": "Implement Route Distance and Coordinate ETA Calculations",
+      "epicKey": "EPIC-MAPS",
+      "overview": "Connect backend services to directions APIs to calculate routes.",
+      "problemStatement": "Inaccurate ETA estimations delay hospital preparations.",
+      "userStory": "As a Coordinator, I want routes and ETAs calculated using real-world traffic data.",
+      "technicalRequirements": [
+        "Integrate Directions APIs on backends.",
+        "Implement caches to reduce API load."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Create caches to store transit metrics"
+        ],
+        "Backend": [
+          "Build transit endpoints in services",
+          "Integrate calculations with APIs"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend calculations return correct results.",
+        "Caches store coordinates successfully."
+      ],
+      "dependencies": "MAPS-01",
+      "priority": "P1 - High",
+      "labels": ["area: Maps", "area: Backend", "area: API", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 5 – Adaptive Matching Engine",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "MAPS-03",
+      "title": "Build Commute Navigation Simulation Controller",
+      "epicKey": "EPIC-MAPS",
+      "overview": "Build transit simulators to update coordinates along route paths.",
+      "problemStatement": "Testing transit tracking without real-world movement is difficult.",
+      "userStory": "As a Presenter, I want route simulations to show tracking features during demos.",
+      "technicalRequirements": [
+        "Interpolate coordinates along paths.",
+        "Broadcast coordinates over WebSockets."
+      ],
+      "implementationTasks": {
+        "Backend": [
+          "Build simulation paths controllers",
+          "Connect paths to WebSocket events"
+        ],
+        "Frontend": [
+          "Add simulation controls to dashboard views"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Simulators emit coordinates over active channels.",
+        "Markers update positions dynamically on maps."
+      ],
+      "dependencies": "MAPS-01",
+      "priority": "P2 - Medium",
+      "labels": ["area: Maps", "area: Backend", "area: Frontend", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 7 – Judge Demo",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "REALTIME-01",
+      "title": "Integrate WebSockets Client (Socket.io) with React Frontend",
+      "epicKey": "EPIC-REALTIME",
+      "overview": "Implement persistent WebSocket connections inside React client contexts.",
+      "problemStatement": "Periodic page refreshes delay delivery of status changes.",
+      "userStory": "As a Coordinator, I want dashboard metrics to update without manual refreshes.",
+      "technicalRequirements": [
+        "Install socket.io-client library.",
+        "Build connection providers and authenticate handshakes."
+      ],
+      "implementationTasks": {
+        "Frontend": [
+          "Install library dependencies",
+          "Create context connections providers",
+          "Integrate connection monitors"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Frontend client establishes socket connections.",
+        "Connections authenticate successfully."
+      ],
+      "dependencies": "PRODUCT-04",
+      "priority": "P0 - Critical",
+      "labels": ["area: Realtime", "area: Backend", "area: Frontend", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 2 – Realtime Platform",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "REALTIME-02",
+      "title": "Implement Room-based Websocket Status Engine",
+      "epicKey": "EPIC-REALTIME",
+      "overview": "Create channel rooms on backends to restrict broadcasts to affiliated clinics.",
+      "problemStatement": "Global broadcasts leak patient information across networks.",
+      "userStory": "As a Coordinator, I want notifications restricted to my clinic network.",
+      "technicalRequirements": [
+        "Build rooms routing in doctor-status.gateway.ts.",
+        "Validate permissions before allowing room entry."
+      ],
+      "implementationTasks": {
+        "Backend": [
+          "Build rooms management logic in gateways",
+          "Integrate authentication check filters"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Gateway restricts room access to authorized users.",
+        "Alert broadcasts target correct rooms."
+      ],
+      "dependencies": "REALTIME-01",
+      "priority": "P0 - Critical",
+      "labels": ["area: Realtime", "area: Backend", "area: Security", "status: Ready"],
+      "storyPoints": 8,
+      "milestone": "Sprint 2 – Realtime Platform",
+      "estimatedTime": "40h"
+    },
+    {
+      "key": "REALTIME-03",
+      "title": "Synchronize Live Doctor Status Across Dashboards",
+      "epicKey": "EPIC-REALTIME",
+      "overview": "Emit updates over active channels when status changes occur.",
+      "problemStatement": "Delays in status updates risk dispatching unavailable doctors.",
+      "userStory": "As a Coordinator, I want to see status changes immediately to avoid dispatch conflicts.",
+      "technicalRequirements": [
+        "Emit events on backend database changes.",
+        "Update local states on client dashboards."
+      ],
+      "implementationTasks": {
+        "Backend": [
+          "Update status controllers to emit events"
+        ],
+        "Frontend": [
+          "Add event listeners to dashboards",
+          "Hook listeners to local contexts"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Status changes update across endpoints instantly.",
+        "Dashboards update without manual page refreshes."
+      ],
+      "dependencies": "REALTIME-02",
+      "priority": "P1 - High",
+      "labels": ["area: Realtime", "area: Doctor", "area: Frontend", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 2 – Realtime Platform",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "REALTIME-04",
+      "title": "Connect SOS Pagers with WebSockets Realtime Alerts",
+      "epicKey": "EPIC-REALTIME",
+      "overview": "Broadcast alerts to specialists when emergencies are triggered.",
+      "problemStatement": "Refreshes delay critical emergency notifications.",
+      "userStory": "As a Doctor, I want alerts to display instantly on my device to accept dispatches.",
+      "technicalRequirements": [
+        "Emit emergency events to target hospital rooms.",
+        "Render alert panels and play sound/vibration cues."
+      ],
+      "implementationTasks": {
+        "Backend": [
+          "Build broadcast methods in gateways"
+        ],
+        "Frontend": [
+          "Design emergency alerts cards",
+          "Integrate vibration and sound triggers"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Alerts display on target devices within 1 second.",
+        "Clinicians can accept or decline dispatches from alerts."
+      ],
+      "dependencies": "REALTIME-02",
+      "priority": "P1 - High",
+      "labels": ["area: Realtime", "area: Hospital", "area: Frontend", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 2 – Realtime Platform",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "SECURITY-01",
+      "title": "Implement JWT and Session-revoking Authentication",
+      "epicKey": "EPIC-SECURITY",
+      "overview": "Implement token-based authentication with session management.",
+      "problemStatement": "Lack of session validations risks unauthorized access to patient data.",
+      "userStory": "As a Doctor, I want my session secured to protect clinical records.",
+      "technicalRequirements": [
+        "Configure token verification and cookies.",
+        "Save sessions to database records."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Verify Session schemas"
+        ],
+        "Backend": [
+          "Build login and logout logic",
+          "Integrate token verification strategies"
+        ],
+        "Frontend": [
+          "Add login forms and interceptors"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Unauthenticated requests are blocked.",
+        "Revoking sessions invalidates tokens."
+      ],
+      "dependencies": "PRODUCT-04",
+      "priority": "P0 - Critical",
+      "labels": ["area: Authentication", "area: Backend", "area: Security", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 1 – MVP Foundation",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "SECURITY-02",
+      "title": "Build Fine-Grained Role-Based Access Control (RBAC) Guard",
+      "epicKey": "EPIC-SECURITY",
+      "overview": "Create authorization filters to restrict access based on roles.",
+      "problemStatement": "Allowing arbitrary roles to execute administrative actions is a security risk.",
+      "userStory": "As an Admin, I want permissions restricted by role to maintain security.",
+      "technicalRequirements": [
+        "Build validation filters inside gateways.",
+        "Verify credentials against permission tables."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Design permissions tables"
+        ],
+        "Backend": [
+          "Build RBAC decorator controllers",
+          "Integrate decorators with routes"
+        ],
+        "Frontend": [
+          "Add permission checks to navigation menus"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Guards filter endpoints based on permissions.",
+        "Unauthorized requests return HTTP 403 errors."
+      ],
+      "dependencies": "SECURITY-01",
+      "priority": "P0 - Critical",
+      "labels": ["area: Authentication", "area: Backend", "area: Security", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 1 – MVP Foundation",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "SECURITY-03",
+      "title": "Implement DPDP Compliance Access Audit Ledger",
+      "epicKey": "EPIC-SECURITY",
+      "overview": "Implement audit log ledgers to record data access events.",
+      "problemStatement": "Lack of data access logs violates compliance regulations.",
+      "userStory": "As a Compliance Officer, I want access logs recorded in an immutable ledger for audit purposes.",
+      "technicalRequirements": [
+        "Record access details to AuditLog.",
+        "Restrict access to read-only formats."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Verify AuditLog schemas"
+        ],
+        "Backend": [
+          "Build audit log services",
+          "Integrate logs with routes"
+        ],
+        "Frontend": [
+          "Connect security views to log APIs"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Audit logs write on data access events.",
+        "Audit logs prevent modification or deletion."
+      ],
+      "dependencies": "SECURITY-02",
+      "priority": "P1 - High",
+      "labels": ["area: Security", "area: Backend", "area: Database", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 8 – Production Readiness",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "SECURITY-04",
+      "title": "Integrate Field-Level Encryption for Patient Data",
+      "epicKey": "EPIC-SECURITY",
+      "overview": "Implement encryption utilities for sensitive database columns.",
+      "problemStatement": "Plaintext columns risk exposure in database compromises.",
+      "userStory": "As a Patient, I want my data encrypted to maintain privacy.",
+      "technicalRequirements": [
+        "Build encryption helpers in services.",
+        "Decrypt data dynamically for authorized requests."
+      ],
+      "implementationTasks": {
+        "Backend": [
+          "Build encryption utilities",
+          "Integrate encryption hooks with database services"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Target columns store encrypted strings.",
+        "Authorized requests return decrypted data."
+      ],
+      "dependencies": "SECURITY-03",
+      "priority": "P1 - High",
+      "labels": ["area: Security", "area: Database", "area: Backend", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 8 – Production Readiness",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "SECURITY-05",
+      "title": "Implement Notification Queue System",
+      "epicKey": "EPIC-SECURITY",
+      "overview": "Implement message queues to process notifications asynchronously.",
+      "problemStatement": "Processing notifications synchronously blocks primary request loops.",
+      "userStory": "As an Admin, I want notifications processed in background queues to maintain performance.",
+      "technicalRequirements": [
+        "Set up database-backed task queues.",
+        "Process tasks asynchronously."
+      ],
+      "implementationTasks": {
+        "Database": [
+          "Design NotificationQueue tables"
+        ],
+        "Backend": [
+          "Build queue services and routing scripts",
+          "Integrate triggers with queues"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Queue processes tasks asynchronously.",
+        "Tasks retry automatically upon failure."
+      ],
+      "dependencies": "SECURITY-02",
+      "priority": "P1 - High",
+      "labels": ["area: Notifications", "area: Backend", "area: DevOps", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 1 – MVP Foundation",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "SECURITY-06",
+      "title": "Implement Background Cron Jobs Engine",
+      "epicKey": "EPIC-SECURITY",
+      "overview": "Implement scheduled task managers to run cron jobs.",
+      "problemStatement": "Lack of cron managers makes automated tasks difficult to schedule.",
+      "userStory": "As an Admin, I want background tasks to execute on schedules.",
+      "technicalRequirements": [
+        "Configure task schedulers.",
+        "Implement logging interfaces."
+      ],
+      "implementationTasks": {
+        "Backend": [
+          "Configure NestJS Schedule packages",
+          "Build monitoring jobs in services"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Scheduled tasks run on configured intervals.",
+        "Task outcomes log correctly."
+      ],
+      "dependencies": "SECURITY-05",
+      "priority": "P1 - High",
+      "labels": ["area: DevOps", "area: Backend", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 1 – MVP Foundation",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "SECURITY-07",
+      "title": "Implement Structured Logging and System Audit Logs",
+      "epicKey": "EPIC-SECURITY",
+      "overview": "Build logging configurations to trace system errors.",
+      "problemStatement": "Plain logs make troubleshooting production errors difficult.",
+      "userStory": "As a DevOps Engineer, I want structured logs to trace issues.",
+      "technicalRequirements": [
+        "Configure logging modules.",
+        "Format output messages."
+      ],
+      "implementationTasks": {
+        "Backend": [
+          "Configure logging wrappers",
+          "Integrate logs with routes"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Logs write to files in JSON format.",
+        "Logs record exception traces."
+      ],
+      "dependencies": "SECURITY-03",
+      "priority": "P1 - High",
+      "labels": ["area: Security", "area: Backend", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 8 – Production Readiness",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "UIUX-01",
+      "title": "Redesign Main Coordination Dashboard UI (Glassmorphic Theme)",
+      "epicKey": "EPIC-UIUX",
+      "overview": "Apply modern dark-mode styles to dashboard layouts.",
+      "problemStatement": "Generic UI layouts cause fatigue during long monitoring shifts.",
+      "userStory": "As a Coordinator, I want a clean dark-mode theme to view maps and alerts.",
+      "technicalRequirements": [
+        "Implement glassmorphic styling parameters.",
+        "Update typographic scales."
+      ],
+      "implementationTasks": {
+        "Frontend": [
+          "Refactor main styling properties",
+          "Apply glassmorphic variables",
+          "Update component structures"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Components render correctly with updated styles.",
+        "Text meets contrast standards."
+      ],
+      "dependencies": "PRODUCT-05",
+      "priority": "P1 - High",
+      "labels": ["area: UI", "area: UX", "area: Frontend", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 6 – UX Polish",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "UIUX-02",
+      "title": "Implement Global Page Loading, Empty, and Error States",
+      "epicKey": "EPIC-UIUX",
+      "overview": "Design fallback screens for loading and error states.",
+      "problemStatement": "Lack of loading states causes layout shifts.",
+      "userStory": "As a User, I want loading loaders and error cards to track state changes.",
+      "technicalRequirements": [
+        "Build loader layouts.",
+        "Create error boundary fallbacks."
+      ],
+      "implementationTasks": {
+        "Frontend": [
+          "Build loader wrappers",
+          "Integrate fallback widgets in components",
+          "Hook fallbacks to API queries"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Loaders display during active queries.",
+        "Errors render error cards with recovery options."
+      ],
+      "dependencies": "UIUX-01",
+      "priority": "P2 - Medium",
+      "labels": ["area: UI", "area: UX", "area: Frontend", "status: Ready"],
+      "storyPoints": 3,
+      "milestone": "Sprint 6 – UX Polish",
+      "estimatedTime": "16h"
+    },
+    {
+      "key": "UIUX-03",
+      "title": "Refactor Layouts for Mobile Responsiveness and Micro-animations",
+      "epicKey": "EPIC-UIUX",
+      "overview": "Optimize layouts for mobile devices and add micro-animations.",
+      "problemStatement": "Dashboards breaking layout on mobile devices limits utility.",
+      "userStory": "As a Doctor, I want mobile-responsive views to manage dispatches on the go.",
+      "technicalRequirements": [
+        "Update layouts to use responsive grids.",
+        "Add CSS animations to transitions."
+      ],
+      "implementationTasks": {
+        "Frontend": [
+          "Adjust sidebar responsiveness",
+          "Apply CSS animations to hover states",
+          "Add mobile navigation overlays"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Dashboards render correctly on mobile sizes.",
+        "Animations render smoothly."
+      ],
+      "dependencies": "UIUX-01",
+      "priority": "P1 - High",
+      "labels": ["area: UI", "area: UX", "area: Frontend", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 6 – UX Polish",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "DEMO-01",
+      "title": "Implement Demo Mode Panel with Step-by-Step Simulation",
+      "epicKey": "EPIC-DEMO",
+      "overview": "Build control panels to trigger and check simulation events.",
+      "problemStatement": "Testing end-to-end flows is difficult during brief pitches.",
+      "userStory": "As a Presenter, I want simulator control buttons to run demos easily.",
+      "technicalRequirements": [
+        "Build control panels in client views.",
+        "Link buttons to state modifiers."
+      ],
+      "implementationTasks": {
+        "Frontend": [
+          "Build console layouts",
+          "Hook actions to local states",
+          "Add step monitors"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Controls update application states.",
+        "Resets restore default properties."
+      ],
+      "dependencies": "PRODUCT-04",
+      "priority": "P1 - High",
+      "labels": ["area: Hackathon", "area: Frontend", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 7 – Judge Demo",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "DEMO-02",
+      "title": "Refactor Guided Emergency Simulation Storyboard Pages",
+      "epicKey": "EPIC-DEMO",
+      "overview": "Develop step indicators showing narratives along timelines.",
+      "problemStatement": "Rapid transitions can cause judges to lose context.",
+      "userStory": "As a Presenter, I want narrative indicators to show step details.",
+      "technicalRequirements": [
+        "Design progress bars displaying steps.",
+        "Highlight panels based on steps."
+      ],
+      "implementationTasks": {
+        "Frontend": [
+          "Add narrative cards to portals",
+          "Hook highlights to active steps"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Narratives map correctly to active steps.",
+        "Visual indicators highlight target panels."
+      ],
+      "dependencies": "DEMO-01",
+      "priority": "P1 - High",
+      "labels": ["area: Hackathon", "area: Frontend", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 7 – Judge Demo",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "DEMO-03",
+      "title": "Design Judge Script and Presentation Overlay Controls",
+      "epicKey": "EPIC-DEMO",
+      "overview": "Create presentation script overlays to show talking points.",
+      "problemStatement": "Presenters missing key details during pitches impacts presentations.",
+      "userStory": "As a Pitcher, I want note cards visible on-screen during presentations.",
+      "technicalRequirements": [
+        "Render collapsible overlays.",
+        "Populate content based on active steps."
+      ],
+      "implementationTasks": {
+        "Frontend": [
+          "Add note cards layers",
+          "Add toggle keys"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Notes update based on active steps.",
+        "Overlays are toggleable."
+      ],
+      "dependencies": "DEMO-02",
+      "priority": "P2 - Medium",
+      "labels": ["area: Hackathon", "area: Documentation", "status: Ready"],
+      "storyPoints": 3,
+      "milestone": "Sprint 7 – Judge Demo",
+      "estimatedTime": "16h"
+    },
+    {
+      "key": "DEMO-04",
+      "title": "Implement Latency Injectors for Mock Elements",
+      "epicKey": "EPIC-DEMO",
+      "overview": "Add delays to simulated actions to make them feel authentic.",
+      "problemStatement": "Instant updates feel artificial and impact realism.",
+      "userStory": "As a Presenter, I want simulated actions delayed to display loading states.",
+      "technicalRequirements": [
+        "Wrap mock functions in timeouts.",
+        "Trigger loaders during timeouts."
+      ],
+      "implementationTasks": {
+        "Frontend": [
+          "Wrap actions in timeouts",
+          "Trigger loaders during delays"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Simulated actions display loading indicators before resolving.",
+        "Actions resolve reliably."
+      ],
+      "dependencies": "DEMO-02",
+      "priority": "P2 - Medium",
+      "labels": ["area: Hackathon", "area: UX", "status: Ready"],
+      "storyPoints": 3,
+      "milestone": "Sprint 7 – Judge Demo",
+      "estimatedTime": "16h"
+    },
+    {
+      "key": "DOC-01",
+      "title": "Refactor README and Onboarding Guidelines",
+      "epicKey": "EPIC-DOCUMENTATION",
+      "overview": "Update root guides covering setup steps and variables.",
+      "problemStatement": "Missing setup guides block developer onboarding.",
+      "userStory": "As a Developer, I want clear setup steps to run the application locally.",
+      "technicalRequirements": [
+        "Outline database setup steps.",
+        "List required environment variables."
+      ],
+      "implementationTasks": {
+        "Documentation": [
+          "Update main README",
+          "Create workspace setup docs"
+        ]
+      },
+      "acceptanceCriteria": [
+        "README updates committed to repository.",
+        "Guides document all variables."
+      ],
+      "dependencies": "PRODUCT-04",
+      "priority": "P2 - Medium",
+      "labels": ["area: Documentation", "status: Ready"],
+      "storyPoints": 2,
+      "milestone": "Sprint 8 – Production Readiness",
+      "estimatedTime": "8h"
+    },
+    {
+      "key": "DOC-02",
+      "title": "Auto-Generate Swagger API Documentation",
+      "epicKey": "EPIC-DOCUMENTATION",
+      "overview": "Implement interactive swagger documentation.",
+      "problemStatement": "Outdated API notes make integration difficult.",
+      "userStory": "As a Frontend Engineer, I want updated API documentation to write client queries.",
+      "technicalRequirements": [
+        "Configure NestJS Swagger module.",
+        "Annotate endpoints and DTO properties."
+      ],
+      "implementationTasks": {
+        "Backend": [
+          "Install API document modules",
+          "Annotate APIs controller routes"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Interactive docs load at /api/docs.",
+        "Endpoints are documented correctly."
+      ],
+      "dependencies": "DOC-01",
+      "priority": "P2 - Medium",
+      "labels": ["area: Documentation", "area: API", "status: Ready"],
+      "storyPoints": 3,
+      "milestone": "Sprint 8 – Production Readiness",
+      "estimatedTime": "16h"
+    },
+    {
+      "key": "DOC-03",
+      "title": "Design ER and Architecture System Diagrams",
+      "epicKey": "EPIC-DOCUMENTATION",
+      "overview": "Generate entity relationship diagrams for database structures.",
+      "problemStatement": "Lack of ER diagrams makes database schema changes difficult to coordinate.",
+      "userStory": "As a Developer, I want to review ER diagrams to design compatible queries.",
+      "technicalRequirements": [
+        "Design relationship models using Mermaid syntax.",
+        "Map primary and foreign keys."
+      ],
+      "implementationTasks": {
+        "Documentation": [
+          "Create Mermaid database schemas",
+          "Commit schemas to repository documentation"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Diagrams successfully render in documentation.",
+        "Diagram mapping matches the active schema."
+      ],
+      "dependencies": "DOC-01",
+      "priority": "P2 - Medium",
+      "labels": ["area: Documentation", "area: Database", "status: Ready"],
+      "storyPoints": 3,
+      "milestone": "Sprint 8 – Production Readiness",
+      "estimatedTime": "16h"
+    },
+    {
+      "key": "DOC-04",
+      "title": "Write Multi-Container Production Deployment Guide",
+      "epicKey": "EPIC-DOCUMENTATION",
+      "overview": "Write deployment guidelines covering container configurations.",
+      "problemStatement": "Deploying without containers risks server-to-server discrepancies.",
+      "userStory": "As a DevOps Engineer, I want docker-compose setups to deploy the stack.",
+      "technicalRequirements": [
+        "Create Dockerfile setups.",
+        "Build compose files linking services."
+      ],
+      "implementationTasks": {
+        "DevOps": [
+          "Write build scripts",
+          "Write Compose configuration files"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Compose launches backend and frontend containers.",
+        "Setup processes are documented."
+      ],
+      "dependencies": "DOC-01",
+      "priority": "P2 - Medium",
+      "labels": ["area: Documentation", "area: DevOps", "status: Ready"],
+      "storyPoints": 3,
+      "milestone": "Sprint 8 – Production Readiness",
+      "estimatedTime": "16h"
+    },
+    {
+      "key": "STARTUP-01",
+      "title": "Build Core Performance and Analytics Dashboard",
+      "epicKey": "EPIC-STARTUP",
+      "overview": "Build metrics dashboards to visualize response times and throughput.",
+      "problemStatement": "Analyzing log files without dashboard charts is slow.",
+      "userStory": "As a Director, I want metrics charts to monitor coordinator performance.",
+      "technicalRequirements": [
+        "Build analytics API routes.",
+        "Render widgets using analytics data."
+      ],
+      "implementationTasks": {
+        "Backend": [
+          "Build analytics endpoints",
+          "Optimize SQL queries"
+        ],
+        "Frontend": [
+          "Connect charts components to backend endpoints",
+          "Add data export actions"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Dashboards display calculated metrics.",
+        "Exports produce valid CSV files."
+      ],
+      "dependencies": "PRODUCT-04",
+      "priority": "P1 - High",
+      "labels": ["area: Startup", "area: Backend", "area: Frontend", "status: Ready"],
+      "storyPoints": 5,
+      "milestone": "Sprint 9 – Hospital Pilot",
+      "estimatedTime": "24h"
+    },
+    {
+      "key": "STARTUP-02",
+      "title": "Design Hospital Pilot Rollout Strategy",
+      "epicKey": "EPIC-STARTUP",
+      "overview": "Develop playbooks mapping out onboarding and training steps.",
+      "problemStatement": "Lack of structured onboarding guidelines delays hospital pilots.",
+      "userStory": "As a PM, I want structured rollout guides to prepare hospital staff.",
+      "technicalRequirements": [
+        "Outline onboarding checklists.",
+        "Draft training materials."
+      ],
+      "implementationTasks": {
+        "Documentation": [
+          "Write pilot playbooks",
+          "Create rollout check lists"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Playbooks are pushed to repository.",
+        "Playbooks document onboarding steps."
+      ],
+      "dependencies": "STARTUP-01",
+      "priority": "P2 - Medium",
+      "labels": ["area: Startup", "area: Documentation", "status: Ready"],
+      "storyPoints": 3,
+      "milestone": "Sprint 9 – Hospital Pilot",
+      "estimatedTime": "16h"
+    },
+    {
+      "key": "STARTUP-03",
+      "title": "Set up Google Maps Billing and API Key Provisioning",
+      "epicKey": "EPIC-STARTUP",
+      "overview": "Configure and secure API keys and setup cost alerts.",
+      "problemStatement": "Unsecured API keys risk unauthorized usage charges.",
+      "userStory": "As a DevOps Engineer, I want keys restricted to avoid unauthorized charges.",
+      "technicalRequirements": [
+        "Secure key configurations.",
+        "Configure usage limits and alerts."
+      ],
+      "implementationTasks": {
+        "DevOps": [
+          "Apply key security checks",
+          "Configure cloud cost warnings"
+        ]
+      },
+      "acceptanceCriteria": [
+        "API keys are restricted to target APIs.",
+        "Billing alerts are configured."
+      ],
+      "dependencies": "STARTUP-01",
+      "priority": "P2 - Medium",
+      "labels": ["area: Startup", "area: Maps", "status: Ready"],
+      "storyPoints": 2,
+      "milestone": "Sprint 9 – Hospital Pilot",
+      "estimatedTime": "8h"
+    },
+    {
+      "key": "STARTUP-04",
+      "title": "Design ABDM and FHIR Standards Health Information Gateway (HIS)",
+      "epicKey": "EPIC-STARTUP",
+      "overview": "Implement gateways complying with FHIR and ABDM standards.",
+      "problemStatement": "Proprietary formats prevent integrations with national health networks.",
+      "userStory": "As a Developer, I want patient data serialized to FHIR formats to sync with HIS databases.",
+      "technicalRequirements": [
+        "Map columns to FHIR JSON schemas.",
+        "Integrate gateways with consent managers."
+      ],
+      "implementationTasks": {
+        "Backend": [
+          "Create FHIR serialization logic",
+          "Build consent interfaces"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Patient data maps to FHIR standards.",
+        "Consent checks are integrated."
+      ],
+      "dependencies": "STARTUP-01",
+      "priority": "P1 - High",
+      "labels": ["area: Startup", "area: API", "area: Backend", "status: Ready"],
+      "storyPoints": 8,
+      "milestone": "Sprint 9 – Hospital Pilot",
+      "estimatedTime": "40h"
+    }
+  ],
+  "discussions": [
+    {
+      "category": "Architecture Decisions",
+      "title": "ADR-001: Selection of Websockets Transport Framework for Realtime Coordinates",
+      "body": "This discussion is opened to align on selecting Socket.io over raw WebSockets or MQTT for coordinate updates. Raw websockets require custom heartbeat management, whereas Socket.io offers built-in reconnections. Let us discuss the scalability impacts on server thread load."
+    },
+    {
+      "category": "Feature Requests",
+      "title": "Feature: Patient Direct Tele-consultation Join Gateway",
+      "body": "Currently the teleconsultation selector is coordinator-driven. Let us discuss introducing a link generator that allows patients to connect directly using WebRTC channels without installing apps."
+    },
+    {
+      "category": "Meeting Notes",
+      "title": "Standup: Kickoff Sprint 1 and Database Model Alignments",
+      "body": "Notes from today's design standup. Agreed to implement JWT sessions and enforce RBAC guards immediately. Action items: @tanish0320 to review schema models and build user sign-up controls."
+    },
+    {
+      "category": "Hospital Feedback",
+      "title": "Pilot Review: Apollo Chennai Desk Integration Obstacles",
+      "body": "Feedback from pilot testing. Coordinators noted that triggering SOS alerts requires too many steps when using the wizard. They requested a quick Code Blue button. We need to streamline the layout."
+    },
+    {
+      "category": "Doctor Feedback",
+      "title": "Clinician Review: Location Tracking Battery Drain Warnings",
+      "body": "Clinicians flagged coordinate tracking battery drain when apps run in background. We need to implement geofencing filters to stop updates when clinicians are off-duty."
+    },
+    {
+      "category": "Ideas",
+      "title": "AI: Predictive Traffic ETA Interpolation Routing Engine",
+      "body": "Should we integrate traffic predictions instead of static ETAs? Let's discuss training models using historical travel data to adjust dispatch calculations."
+    },
+    {
+      "category": "Known Problems",
+      "title": "Bug: Drag and Drop Calendar overlaps fail check validation",
+      "body": "Under low-speed connections, drag events on calendar views can bypass conflict checks. We need to implement transaction blocks on the backend to enforce checks."
+    }
+  ]
+}

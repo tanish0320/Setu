@@ -5,6 +5,7 @@ import { CalendarPage } from './CalendarPage';
 import { EmergencyWorkflowPage } from './EmergencyWorkflowPage';
 import { RoleDashboardDoctor } from './RoleDashboardDoctor';
 import { RoleDashboardHospitalAdmin } from './RoleDashboardHospitalAdmin';
+import { RoleDashboardAmbulance } from './RoleDashboardAmbulance';
 import {
   SecurityCenterPage,
   ApiExplorerPage,
@@ -38,60 +39,66 @@ export const JudgeMode = ({ onClose }) => {
     },
     {
       num: 3,
-      title: "3. Critical Emergency Occurs",
+      title: "3. Critical Emergency SOS",
       desc: "A patient arrives at Apollo Chennai with acute coronary syndrome. The desk receptionist initiates the Emergency SOS pager broadcast with one click.",
       stats: ["🚨 Code Blue Triggered", "🫀 Specialty: Cardiology", "⚡ Destination: Apollo Chennai"]
     },
     {
       num: 4,
-      title: "4. AI Coordination Match",
+      title: "4. Emergency Destination Intelligence",
+      desc: "When an ambulance picks up a patient (e.g., 28 y/o Knee Dislocation / ACL Tear), SETU evaluates nearby hospitals by definitive time to care—not just distance. Even though Apollo (5.4 km) is nearest, its MRI technician is offline (42m delay), so SETU directs the paramedic to Manipal (9 km, 17m care start).",
+      stats: ["🚑 Paramedic Intake & Live Distance Map", "⏱️ 17m to Care vs 42m at Nearest", "🧠 AI Confidence: 94%"]
+    },
+    {
+      num: 5,
+      title: "5. AI Coordination Match",
       desc: "The SETU AI Engine instantly ranks all available network specialists based on distance, occupancy, reliability history, and commute ETAs, showcasing its mathematical breakdown.",
       stats: ["🧠 AI Match Score: 98%", "📍 Travel Distance: 0 km", "⚡ Pagers Ringing Active"]
     },
     {
-      num: 5,
-      title: "5. Doctor Accepts & Transits",
+      num: 6,
+      title: "6. Doctor Accepts & Transits",
       desc: "Dr. Rajesh Sharma accepts the alert via his pager. The Live India Map tracks his commute route and ETA coordinates in real-time.",
       stats: ["🚗 Transit Status: En-route", "⏳ Countdown: 45s", "📍 GPS Coordinates: Active"]
     },
     {
-      num: 6,
-      title: "6. Hospital Desks Sync",
+      num: 7,
+      title: "7. Hospital Desks Sync",
       desc: "The Hospital Admin dashboard updates instantly. Response metrics, OPD queues, and specialist utilization rates refresh in real-time across the cluster.",
       stats: ["📊 Mean Response: 4.2 mins", "💡 Peak Utilization: 81%", "⚡ Cluster Status: Synced"]
     },
     {
-      num: 7,
-      title: "7. Patient Handoff Compiled",
+      num: 8,
+      title: "8. Patient Handoff Compiled",
       desc: "Upon arrival, Dr. Rajesh treats the patient and logs a structured handoff note, immediately broadcasted to the patient's global records ledger.",
       stats: ["📝 Clinical Note Compiled", "🔒 Secure Handoff Blocked", "🏥 Node Check-in: Complete"]
     },
     {
-      num: 8,
-      title: "8. Reliability Score Updated",
+      num: 9,
+      title: "9. Reliability Score Updated",
       desc: "The doctor's overall reliability rating updates dynamically based on response time, maintaining trust metrics inside the national registry.",
       stats: ["📈 Reliability Index: +2%", "✓ On-time Check-in: Yes", "🔒 Audit: Cryptographically logged"]
     },
     {
-      num: 9,
-      title: "9. System Health & SOC",
+      num: 10,
+      title: "10. System Health & SOC",
       desc: "SETU demonstrates enterprise-readiness with the Security Operations Center (SOC), active API Explorers, and cluster health monitors.",
       stats: ["🔒 AES-255-GCM & TLS 1.3", "💡 Latency: 12ms", "✓ DPDP Compliant (India)"]
     },
     {
-      num: 10,
-      title: "10. Technical Architecture",
+      num: 11,
+      title: "11. Technical Architecture",
       desc: "Our scalable cloud architecture connects clients, AWS Gateways, NestJS engines, and Firebase pagers to handle thousands of operations concurrently.",
       stats: ["🔌 AWS Gateway & JWT", "🗄️ PostgreSQL Aurora replica", "💬 Redis Cache active"]
     },
     {
-      num: 11,
+      num: 12,
       title: "SETU (सेतु)",
       desc: "Connecting Hospitals. Empowering Doctors. Saving Lives.",
       stats: [
         "✓ Under 5-minute emergency coordination",
+        "✓ Emergency destination intelligence & fast treatment routing",
         "✓ Multi-hospital physician scheduling",
-        "✓ Real-time specialist availability",
         "✓ Secure, scalable, enterprise-ready architecture"
       ]
     }
@@ -115,38 +122,43 @@ export const JudgeMode = ({ onClose }) => {
         cancelSOS();
         break;
       case 4:
+        setActivePage('dashboard');
+        setRole('Ambulance User');
+        cancelSOS();
+        break;
+      case 5:
         setActivePage('emergency');
         setRole('Receptionist');
         // trigger cardiology SOS at Apollo Chennai (h3)
         dispatchSOS('Cardiology', 'Critical', 'h3');
         break;
-      case 5:
+      case 6:
         setActivePage('emergency');
         setRole('Receptionist');
         // Simulate doctor d1 (Rajesh Sharma) accepting SOS
         acceptSOS('d1');
         break;
-      case 6:
+      case 7:
         setActivePage('dashboard');
         setRole('Hospital Admin');
         break;
-      case 7:
+      case 8:
         setActivePage('dashboard');
         setRole('Doctor');
         break;
-      case 8:
+      case 9:
         setActivePage('reliability');
         setRole('Doctor');
         break;
-      case 9:
+      case 10:
         setActivePage('security');
         setRole('Super Admin');
         break;
-      case 10:
+      case 11:
         setActivePage('architecture');
         setRole('Super Admin');
         break;
-      case 11:
+      case 12:
         setActivePage('dashboard');
         setRole('Super Admin');
         break;
@@ -156,7 +168,7 @@ export const JudgeMode = ({ onClose }) => {
   }, [slide]);
 
   const handleNext = () => {
-    if (slide < 11) setSlide(slide + 1);
+    if (slide < 12) setSlide(slide + 1);
   };
 
   const handlePrev = () => {
@@ -177,14 +189,17 @@ export const JudgeMode = ({ onClose }) => {
       case 2:
         return <CalendarPage />;
       case 3:
-      case 4:
-      case 5:
         return <EmergencyWorkflowPage />;
+      case 4:
+        return <RoleDashboardAmbulance activeSubTab="dashboard" />;
+      case 5:
       case 6:
-        return <RoleDashboardHospitalAdmin />;
+        return <EmergencyWorkflowPage />;
       case 7:
-        return <RoleDashboardDoctor />;
+        return <RoleDashboardHospitalAdmin />;
       case 8:
+        return <RoleDashboardDoctor />;
+      case 9:
         return (
           <div className="bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border rounded-premium p-6 shadow-sm space-y-4">
             <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">Specialist Reliability Diagnostics</h3>
@@ -201,11 +216,11 @@ export const JudgeMode = ({ onClose }) => {
             </div>
           </div>
         );
-      case 9:
-        return <SecurityCenterPage />;
       case 10:
-        return <ArchitecturePage />;
+        return <SecurityCenterPage />;
       case 11:
+        return <ArchitecturePage />;
+      case 12:
         return (
           <div className="flex flex-col items-center justify-center h-full text-center py-16 space-y-6">
             <span className="material-symbols-outlined text-brand text-7xl animate-pulse">cell_tower</span>
@@ -251,7 +266,7 @@ export const JudgeMode = ({ onClose }) => {
           {/* Header */}
           <div className="flex justify-between items-center pb-3 border-b border-slate-800">
             <span className="text-xs font-black text-brand uppercase tracking-wider font-headline">SETU Presentation</span>
-            <span className="text-[10px] bg-slate-800 text-slate-400 font-mono px-2 py-0.5 rounded">Slide {slide}/11</span>
+            <span className="text-[10px] bg-slate-800 text-slate-400 font-mono px-2 py-0.5 rounded">Slide {slide}/12</span>
           </div>
 
           {/* Narration */}
@@ -261,7 +276,7 @@ export const JudgeMode = ({ onClose }) => {
           </div>
 
           {/* Metrics */}
-          {slide < 11 && (
+          {slide < 12 && (
             <div className="space-y-2 bg-[#121927] border border-slate-800 p-3.5 rounded-premium text-xs">
               <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider block">Key Performance Diagnostics</span>
               {currentSlide.stats.map((s, idx) => (
@@ -286,7 +301,7 @@ export const JudgeMode = ({ onClose }) => {
             </button>
             <button
               onClick={handleNext}
-              disabled={slide === 11}
+              disabled={slide === 12}
               className="flex-1 bg-brand hover:bg-brand-600 disabled:opacity-50 text-white font-bold text-xs py-2 rounded-premium transition-colors"
             >
               Next

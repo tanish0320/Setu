@@ -3,107 +3,107 @@ import { useApp } from '../context/AppContext';
 
 export const DoctorsPage = () => {
   const { doctors, hospitals, setActivePage, setSelectedProfileDoctorId } = useApp();
-  const [filterSpec, setFilterSpec] = useState('All');
-  const [filterStatus, setFilterStatus] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedSpecialty, setSelectedSpecialty] = useState('All');
 
-  const specialties = ['All', 'Cardiology', 'Neurology', 'Orthopedics', 'Pediatrics', 'General Surgery'];
-  
+  const specialtiesList = ['All', 'Cardiology', 'Neurology', 'Orthopedics', 'Pediatrics', 'General Surgery'];
+
   const getHospitalName = (hospId) => {
     return hospitals.find(h => h.id === hospId)?.shortName || 'Offline';
   };
 
-  const filtered = doctors.filter(doc => {
-    const specMatch = filterSpec === 'All' || doc.specialty === filterSpec;
-    const statusMatch = filterStatus === 'All' || 
-      (filterStatus === 'Available' && doc.status === 'Available') ||
-      (filterStatus === 'Busy' && doc.status !== 'Available');
-    return specMatch && statusMatch;
+  const filteredDoctors = doctors.filter(doc => {
+    const matchesSearch = doc.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSpecialty = selectedSpecialty === 'All' || doc.specialty === selectedSpecialty;
+    return matchesSearch && matchesSpecialty;
   });
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="max-w-4xl mx-auto py-6 space-y-6 text-left animate-fade-in">
       
       {/* Title */}
-      <div className="flex justify-between items-center border-b border-slate-200 dark:border-dark-border pb-4">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-200 dark:border-dark-border pb-4 gap-3">
         <div>
-          <h2 className="text-xl font-bold font-headline text-slate-800 dark:text-white">Affiliated Specialists Network</h2>
+          <h2 className="text-xl font-bold font-headline text-slate-800 dark:text-white">Affiliated Specialists</h2>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Registered doctors across Apollo, Fortis, Max and Manipal hospital nodes.
+            Registered doctors across the network.
           </p>
         </div>
 
         {/* Filter controls */}
-        <div className="flex space-x-3 text-xs">
+        <div className="flex items-center space-x-2 text-xs">
+          <input
+            type="text"
+            className="bg-white dark:bg-dark-card border border-slate-205 dark:border-dark-border rounded px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-brand font-medium w-44"
+            placeholder="Search by name..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
           <select
-            className="bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border rounded px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-brand font-medium text-slate-700 dark:text-slate-200"
-            value={filterSpec}
-            onChange={(e) => setFilterSpec(e.target.value)}
+            className="bg-white dark:bg-dark-card border border-slate-205 dark:border-dark-border rounded px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-brand font-medium text-slate-700 dark:text-slate-200"
+            value={selectedSpecialty}
+            onChange={(e) => setSelectedSpecialty(e.target.value)}
           >
-            {specialties.map(s => <option key={s} value={s}>{s}</option>)}
-          </select>
-
-          <select
-            className="bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border rounded px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-brand font-medium text-slate-700 dark:text-slate-200"
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-          >
-            <option value="All">All Statuses</option>
-            <option value="Available">Available</option>
-            <option value="Busy">Consulting / Commuting</option>
+            {specialtiesList.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
         </div>
       </div>
 
-      {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filtered.map(doc => (
-          <div
-            key={doc.id}
-            onClick={() => {
-              setSelectedProfileDoctorId(doc.id);
-              setActivePage('profile');
-            }}
-            className="bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border hover:border-brand/40 dark:hover:border-brand/40 rounded-premium p-5 shadow-sm hover:shadow-premium transition-all cursor-pointer group flex flex-col justify-between"
-          >
-            <div className="flex items-start justify-between">
-              <div className="flex items-center space-x-3">
-                <img src={doc.avatar} alt={doc.name} className="w-12 h-12 rounded-full object-cover border-2 border-slate-100 group-hover:border-brand/20 transition-colors" />
+      {/* Ranks list grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {filteredDoctors.map(doc => {
+          const isAvailable = doc.status === 'Available';
+          
+          return (
+            <div
+              key={doc.id}
+              onClick={() => {
+                setSelectedProfileDoctorId(doc.id);
+                setActivePage('profile');
+              }}
+              className="bg-white dark:bg-dark-card border border-slate-205 dark:border-dark-border hover:border-brand/40 rounded-premium p-4 shadow-sm hover:shadow transition-all cursor-pointer flex flex-col justify-between"
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex items-center space-x-3">
+                  <img src={doc.avatar} alt={doc.name} className="w-10 h-10 rounded-full object-cover border" />
+                  <div>
+                    <h3 className="text-xs font-black text-slate-800 dark:text-slate-100">{doc.name}</h3>
+                    <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider block mt-0.5">{doc.specialty}</span>
+                  </div>
+                </div>
+                <span className={`text-[8.5px] px-2 py-0.5 rounded-full font-bold uppercase ${
+                  isAvailable ? 'bg-emerald-500/10 text-success' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'
+                }`}>
+                  {doc.status}
+                </span>
+              </div>
+
+              <div className="mt-4 pt-3.5 border-t border-slate-100 dark:border-dark-border/40 grid grid-cols-2 gap-2 text-[10px] text-slate-500 dark:text-slate-450 leading-relaxed">
                 <div>
-                  <h3 className="text-xs font-black text-slate-800 dark:text-slate-100 group-hover:text-brand transition-colors">{doc.name}</h3>
-                  <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mt-0.5">{doc.specialty}</span>
+                  <span className="text-[8px] text-slate-400 font-bold uppercase block">Current Location</span>
+                  <span className="font-semibold text-slate-700 dark:text-slate-250">{getHospitalName(doc.currentHospitalId)}</span>
+                </div>
+                <div>
+                  <span className="text-[8px] text-slate-400 font-bold uppercase block">Reliability</span>
+                  <span className="font-bold text-brand">{doc.reliability.overall}% Index</span>
+                </div>
+                <div className="mt-1">
+                  <span className="text-[8px] text-slate-400 font-bold uppercase block">Distance Radius</span>
+                  <span className="font-semibold text-slate-700 dark:text-slate-250">{doc.travelRadius} km</span>
+                </div>
+                <div className="mt-1">
+                  <span className="text-[8px] text-slate-400 font-bold uppercase block">Availability Window</span>
+                  <span className="font-semibold text-slate-700 dark:text-slate-250">09:00 - 18:00</span>
                 </div>
               </div>
-              <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase ${
-                doc.status === 'Available' ? 'bg-emerald-500/15 text-success' :
-                doc.status === 'Emergency' ? 'bg-red-500/15 text-danger animate-pulse' :
-                doc.status === 'In Transit' ? 'bg-amber-500/15 text-warning' :
-                'bg-slate-100 dark:bg-slate-800 text-slate-400'
-              }`}>
-                {doc.status}
-              </span>
-            </div>
 
-            <div className="mt-5 grid grid-cols-2 gap-4 border-t border-slate-100 dark:border-dark-border/40 pt-4 text-left">
-              <div>
-                <span className="text-[9px] text-slate-400 font-bold uppercase block">Current Hub</span>
-                <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">{getHospitalName(doc.currentHospitalId)}</span>
+              <div className="mt-4 pt-2 border-t flex justify-end text-[9.5px] text-brand font-bold uppercase hover:underline">
+                View Profile
               </div>
-              <div>
-                <span className="text-[9px] text-slate-400 font-bold uppercase block">Reliability</span>
-                <span className="text-xs font-black text-brand">{doc.reliability.overall}% Index</span>
-              </div>
-            </div>
 
-            <div className="mt-4 flex justify-between items-center text-[10px] text-slate-400 pt-2 font-medium">
-              <span>{doc.experience} years experience</span>
-              <span className="text-brand font-bold group-hover:underline flex items-center">
-                <span>View Profile</span>
-                <span className="material-symbols-outlined text-xs ml-0.5">chevron_right</span>
-              </span>
             </div>
-
-          </div>
-        ))}
+          );
+        })}
       </div>
 
     </div>

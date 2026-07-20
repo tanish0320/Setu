@@ -71,6 +71,7 @@ export const CommandPalette = ({ isOpen, onClose }) => {
     { name: 'Switch to Hospital Admin Dashboard', category: 'Role Credentials', action: () => { setRole('Hospital Admin'); onClose(); } },
     { name: 'Switch to Receptionist Dashboard', category: 'Role Credentials', action: () => { setRole('Receptionist'); onClose(); } },
     { name: 'Switch to Doctor Dashboard', category: 'Role Credentials', action: () => { setRole('Doctor'); onClose(); } },
+    { name: 'Switch to Ambulance User Dashboard', category: 'Role Credentials', action: () => { setRole('Ambulance User'); onClose(); } },
   ];
 
   const filteredActions = query === '' ? actions.slice(0, 5) : actions.filter(a => 

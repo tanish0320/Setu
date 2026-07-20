@@ -10,6 +10,7 @@ import { RoleDashboardDoctor } from './components/RoleDashboardDoctor';
 import { RoleDashboardReceptionist } from './components/RoleDashboardReceptionist';
 import { RoleDashboardHospitalAdmin } from './components/RoleDashboardHospitalAdmin';
 import { RoleDashboardSuperAdmin } from './components/RoleDashboardSuperAdmin';
+import { RoleDashboardAmbulance } from './components/RoleDashboardAmbulance';
 
 // Operational and Admin Pages
 import { CalendarPage } from './components/CalendarPage';
@@ -53,7 +54,8 @@ const DashboardLayout = () => {
       'Doctor': ['dashboard', 'calendar', 'emergency', 'doctors', 'hospitals', 'patients', 'reliability', 'settings', 'profile', 'architecture'],
       'Receptionist': ['dashboard', 'calendar', 'emergency', 'appointments', 'doctors', 'hospitals', 'patients', 'settings', 'profile', 'architecture'],
       'Hospital Admin': ['dashboard', 'calendar', 'emergency', 'appointments', 'doctors', 'hospitals', 'patients', 'departments', 'reports', 'reliability', 'emergency_analytics', 'settings', 'audit_logs', 'profile', 'architecture', 'performance', 'security', 'system_health'],
-      'Super Admin': ['dashboard', 'calendar', 'emergency', 'appointments', 'doctors', 'hospitals', 'patients', 'departments', 'reports', 'reliability', 'emergency_analytics', 'users', 'roles', 'settings', 'audit_logs', 'tickets', 'profile', 'architecture', 'performance', 'security', 'api_explorer', 'system_health', 'feature_flags']
+      'Super Admin': ['dashboard', 'calendar', 'emergency', 'appointments', 'doctors', 'hospitals', 'patients', 'departments', 'reports', 'reliability', 'emergency_analytics', 'users', 'roles', 'settings', 'audit_logs', 'tickets', 'profile', 'architecture', 'performance', 'security', 'api_explorer', 'system_health', 'feature_flags'],
+      'Ambulance User': ['dashboard', 'calendar', 'emergency', 'smart_recommendations', 'live_status', 'hospitals', 'doctors', 'patients', 'settings', 'profile', 'architecture']
     };
 
     const hasAccess = permissions[role]?.includes(activePage) || false;
@@ -80,11 +82,16 @@ const DashboardLayout = () => {
           case 'Receptionist': return <RoleDashboardReceptionist />;
           case 'Hospital Admin': return <RoleDashboardHospitalAdmin />;
           case 'Super Admin': return <RoleDashboardSuperAdmin />;
+          case 'Ambulance User': return <RoleDashboardAmbulance activeSubTab="dashboard" />;
           default: return null;
         }
+      case 'smart_recommendations':
+      case 'live_status':
+        return <RoleDashboardAmbulance activeSubTab={activePage} />;
       case 'calendar':
         return <CalendarPage />;
       case 'emergency':
+        if (role === 'Ambulance User') return <RoleDashboardAmbulance activeSubTab="emergency" />;
         return <EmergencyWorkflowPage />;
       case 'appointments':
         return <AppointmentsPage />;

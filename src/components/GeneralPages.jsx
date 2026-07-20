@@ -2,58 +2,386 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { BarChart } from './SvgCharts';
 
-// 1. Appointments Page
+// 1. New Consultation Wizard Page (V3 Redesign)
 export const AppointmentsPage = () => {
-  const { appointments, doctors, hospitals } = useApp();
+  const {
+    doctors,
+    hospitals,
+    selectedHospital,
+    bookAppointment,
+    dispatchSOS,
+    setActivePage,
+    logAudit
+  } = useApp();
+
+  const [step, setStep] = useState(1);
   
+  // Wizard form state (Simulates auto-saving by preserving local state)
+  const [form, setForm] = useState({
+    uhid: 'UHID-' + Math.floor(100000 + Math.random() * 900000),
+    patientName: '',
+    age: '',
+    gender: 'M',
+    chiefComplaint: '',
+    presentIllness: '',
+    history: '',
+    vitalBP: '120/80',
+    vitalHR: '80',
+    vitalSPO2: '98',
+    vitalTemp: '98.6',
+    condition: 'Stable',
+    specialty: 'Cardiology',
+    priority: 'Routine',
+    mode: 'Either',
+    time: '14:00',
+    date: 'Monday',
+    duration: '30 mins'
+  });
+
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [selectedDoc, setSelectedDoc] = useState(null);
+
+  const specialties = ['Cardiology', 'Neurology', 'Orthopedics', 'Pediatrics', 'General Surgery'];
+
+  // Match calculations
+  const calculateRecommendations = () => {
+    return doctors
+      .filter(doc => doc.specialty.toLowerCase() === form.specialty.toLowerCase())
+      .map(doc => {
+        const isAtSameHosp = doc.currentHospitalId === selectedHospital.id;
+        const currentHosp = hospitals.find(h => h.id === doc.currentHospitalId);
+        const distance = isAtSameHosp ? 0 : (currentHosp ? Math.abs(currentHosp.distance - selectedHospital.distance) : 4.0);
+        const estimatedETA = isAtSameHosp ? 2 : Math.round(distance * 3.5 + 4);
+
+        let availabilityScore = doc.status === 'Available' ? 100 : doc.status === 'Consulting' ? 65 : 30;
+        let distanceScore = Math.max(0, 100 - (distance * 15));
+        let reliabilityScore = doc.reliability.overall;
+        
+        const matchScore = Math.round(
+          (availabilityScore * 0.40) +
+          (distanceScore * 0.30) +
+          (reliabilityScore * 0.20) +
+          (doc.workload === 'Low' ? 10 : 5)
+        );
+
+        return {
+          ...doc,
+          matchScore,
+          distance: parseFloat(distance.toFixed(1)),
+          estimatedETA,
+          isAtSameHosp
+        };
+      })
+      .sort((a, b) => b.matchScore - a.matchScore);
+  };
+
+  const handleNext = () => {
+    if (step === 1 && (!form.patientName || !form.chiefComplaint)) {
+      alert('Please fill out Patient Name and Chief Complaint.');
+      return;
+    }
+    if (step === 4 && !selectedDoc && form.priority !== 'Emergency') {
+      alert('Please select a doctor to proceed.');
+      return;
+    }
+    setStep(prev => prev + 1);
+  };
+
+  const handlePrev = () => {
+    setStep(prev => prev - 1);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const files = Array.from(e.dataTransfer.files).map(f => f.name);
+      setUploadedFiles(prev => [...prev, ...files]);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if (form.priority === 'Emergency') {
+      // Trigger emergency dispatch SOS immediately
+      dispatchSOS(form.specialty, 'Critical', selectedHospital.id);
+      setActivePage('emergency');
+      alert('🚨 Critical SOS Dispatched! Tracking en-route specialist.');
+    } else {
+      // Book standard consultation session
+      bookAppointment({
+        patientName: form.patientName,
+        age: form.age,
+        gender: form.gender,
+        doctorId: selectedDoc.id,
+        hospitalId: selectedHospital.id,
+        date: form.date,
+        time: form.time,
+        department: form.specialty
+      });
+      setActivePage('emergency');
+      alert('Consultation Dispatch request successfully sent.');
+    }
+  };
+
+  const rankedDocs = calculateRecommendations();
+
   return (
-    <div className="space-y-6 animate-fade-in text-left">
-      <div className="border-b border-slate-200 dark:border-dark-border pb-4">
-        <h2 className="text-xl font-bold font-headline text-slate-800 dark:text-white">Active Consultation Appointments</h2>
-        <p className="text-xs text-slate-400 mt-1">Global schedule overview for registered patients across independent nodes.</p>
+    <div className="max-w-xl mx-auto py-6 space-y-6 text-left animate-fade-in">
+      
+      {/* Title */}
+      <div className="border-b pb-4">
+        <h2 className="text-xl font-black font-headline text-slate-850 dark:text-white">New Consultation Request</h2>
+        <p className="text-xs text-slate-450 mt-1">Simple wizard. Autosaves step inputs.</p>
       </div>
 
-      <div className="bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border rounded-premium shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead>
-              <tr className="border-b border-slate-100 dark:border-dark-border/40 text-slate-400 font-bold uppercase bg-slate-50/50 dark:bg-slate-900/10">
-                <th className="p-3">Patient</th>
-                <th className="p-3">Specialist</th>
-                <th className="p-3">Hospital Center</th>
-                <th className="p-3">Schedule Slot</th>
-                <th className="p-3">Department</th>
-                <th className="p-3">Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-50 dark:divide-dark-border/30">
-              {appointments.map(appt => {
-                const doc = doctors.find(d => d.id === appt.doctorId);
-                const hosp = hospitals.find(h => h.id === appt.hospitalId);
-                return (
-                  <tr key={appt.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/15">
-                    <td className="p-3 font-semibold text-slate-700 dark:text-slate-200">
-                      {appt.patientName} <span className="text-[10px] text-slate-400 font-normal">({appt.age}y/{appt.gender})</span>
-                    </td>
-                    <td className="p-3 text-slate-600 dark:text-slate-300">{doc?.name || 'Specialist'}</td>
-                    <td className="p-3 text-slate-600 dark:text-slate-300">{hosp?.shortName || 'Clinic'}</td>
-                    <td className="p-3 font-mono text-slate-500">{appt.date} {appt.time}</td>
-                    <td className="p-3 text-slate-400">{appt.department}</td>
-                    <td className="p-3">
-                      <span className={`text-[9px] px-2 py-0.5 rounded font-bold uppercase ${
-                        appt.status === 'Completed' ? 'bg-emerald-500/10 text-success' : 'bg-brand-500/10 text-brand'
-                      }`}>{appt.status}</span>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+      {/* Progress HUD bar */}
+      <div className="flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+        <span>Step {step} of 5</span>
+        <span>{
+          step === 1 ? 'Patient Details' :
+          step === 2 ? 'Upload Reports' :
+          step === 3 ? 'AI Synthesis Summary' :
+          step === 4 ? 'Doctor Recommendation' : 'Review & Submit'
+        }</span>
       </div>
+      <div className="w-full bg-slate-100 dark:bg-slate-800 h-1 rounded-full overflow-hidden">
+        <div className="bg-brand h-full transition-all duration-300" style={{ width: `${(step / 5) * 100}%` }}></div>
+      </div>
+
+      <div className="bg-white dark:bg-dark-card border border-slate-205 dark:border-dark-border rounded-premium p-6 shadow-sm min-h-[320px] flex flex-col justify-between">
+        
+        {/* STEP 1: PATIENT DETAILS */}
+        {step === 1 && (
+          <div className="space-y-4 text-xs animate-fade-in">
+            <div className="grid grid-cols-3 gap-3">
+              <div className="col-span-2">
+                <label className="text-[9px] font-bold text-slate-400 uppercase block mb-1">Patient Name</label>
+                <input
+                  type="text" required placeholder="e.g. Anil Kumar"
+                  className="w-full bg-slate-50 dark:bg-slate-900 border p-2 rounded focus:outline-none"
+                  value={form.patientName}
+                  onChange={(e) => setForm({ ...form, patientName: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="text-[9px] font-bold text-slate-400 uppercase block mb-1">UHID</label>
+                <input
+                  type="text" className="w-full bg-slate-50 dark:bg-slate-900 border p-2 rounded focus:outline-none font-mono"
+                  value={form.uhid}
+                  onChange={(e) => setForm({ ...form, uhid: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3">
+              <div>
+                <label className="text-[9px] font-bold text-slate-400 uppercase block mb-1">Age</label>
+                <input
+                  type="number" required placeholder="52"
+                  className="w-full bg-slate-50 dark:bg-slate-900 border p-2 rounded focus:outline-none"
+                  value={form.age}
+                  onChange={(e) => setForm({ ...form, age: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="text-[9px] font-bold text-slate-400 uppercase block mb-1">Gender</label>
+                <select
+                  className="w-full bg-slate-50 dark:bg-slate-900 border p-2 rounded focus:outline-none"
+                  value={form.gender}
+                  onChange={(e) => setForm({ ...form, gender: e.target.value })}
+                >
+                  <option value="M">Male</option>
+                  <option value="F">Female</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-[9px] font-bold text-slate-400 uppercase block mb-1">Vitals Condition</label>
+                <select
+                  className="w-full bg-slate-50 dark:bg-slate-900 border p-2 rounded focus:outline-none"
+                  value={form.condition}
+                  onChange={(e) => setForm({ ...form, condition: e.target.value })}
+                >
+                  <option value="Stable">Stable</option>
+                  <option value="Guarded">Guarded</option>
+                  <option value="Critical">Critical (SOS)</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="text-[9px] font-bold text-slate-400 uppercase block mb-1">Required Specialty</label>
+                <select
+                  className="w-full bg-slate-50 dark:bg-slate-900 border p-2 rounded focus:outline-none"
+                  value={form.specialty}
+                  onChange={(e) => setForm({ ...form, specialty: e.target.value })}
+                >
+                  {specialties.map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="text-[9px] font-bold text-slate-400 uppercase block mb-1">Urgency Priority</label>
+                <select
+                  className="w-full bg-slate-50 dark:bg-slate-900 border p-2 rounded focus:outline-none font-bold"
+                  value={form.priority}
+                  onChange={(e) => setForm({ ...form, priority: e.target.value })}
+                >
+                  <option value="Routine">Routine</option>
+                  <option value="Urgent">Urgent</option>
+                  <option value="Emergency">🚨 Emergency (Code Blue)</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="text-[9px] font-bold text-slate-400 uppercase block mb-1">Chief Complaint</label>
+              <textarea
+                placeholder="Symptoms summary..."
+                className="w-full h-14 bg-slate-50 dark:bg-slate-900 border p-2 rounded focus:outline-none"
+                value={form.chiefComplaint}
+                onChange={(e) => setForm({ ...form, chiefComplaint: e.target.value })}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* STEP 2: UPLOAD REPORTS */}
+        {step === 2 && (
+          <div className="space-y-4 text-xs animate-fade-in text-center">
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block text-left">Drag & Drop Scan files</span>
+            
+            <div
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+              className="border-2 border-dashed border-slate-200 dark:border-dark-border bg-slate-50/40 dark:bg-slate-900/5 p-8 rounded-premium flex flex-col items-center justify-center space-y-1.5 cursor-pointer hover:border-brand transition-colors"
+            >
+              <span className="material-symbols-outlined text-slate-400 text-3xl">cloud_upload</span>
+              <span className="font-bold text-slate-650">Drag lab PDFs or ECG images here</span>
+              <span className="text-[9px] text-slate-400">Supports PDF, JPG, DICOM</span>
+            </div>
+
+            {uploadedFiles.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 justify-start">
+                {uploadedFiles.map((fn, idx) => (
+                  <span key={idx} className="bg-slate-105 border px-2 py-0.5 rounded text-[9.5px] flex items-center space-x-1">
+                    <span className="material-symbols-outlined text-[10px]">description</span>
+                    <span>{fn}</span>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* STEP 3: AI PATIENT SUMMARY */}
+        {step === 3 && (
+          <div className="space-y-4 text-xs animate-fade-in text-left">
+            <span className="text-[10px] text-slate-405 font-bold uppercase tracking-wider block">Synthesized AI Clinical Insight</span>
+            
+            <div className="bg-brand-500/5 dark:bg-brand-900/10 border border-brand-500/20 p-4 rounded-premium space-y-3 leading-relaxed text-slate-600 dark:text-slate-350">
+              <p><span className="font-bold text-slate-700 dark:text-slate-200 block">Executive Summary:</span> Patient {form.patientName || 'Anil'} presents with complains of {form.chiefComplaint || 'symptoms'}. Stable vital condition.</p>
+              <p><span className="font-bold text-slate-700 dark:text-slate-200 block">Suspected Specialty Match:</span> {form.specialty} Specialists pool. Recommended Urgency level: {form.priority}.</p>
+              <p><span className="font-bold text-slate-700 dark:text-slate-200 block">AI Next-step Action:</span> CAT angiogram protocol if emergency; establish vascular lines.</p>
+            </div>
+          </div>
+        )}
+
+        {/* STEP 4: DOCTOR RECOMMENDATION */}
+        {step === 4 && (
+          <div className="space-y-4 text-xs animate-fade-in text-left">
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">AI Doctor Suitability ranks</span>
+            
+            {form.priority === 'Emergency' ? (
+              <div className="p-4 border border-dashed rounded text-center text-slate-450 bg-red-500/5 border-red-500/20">
+                <span className="material-symbols-outlined text-danger text-2xl animate-bounce">cell_tower</span>
+                <p className="font-bold text-danger mt-1">🚨 Emergency SOS Mode Active</p>
+                <p className="text-[10px] text-slate-400 mt-0.5">Bypasses normal selection. SETU AI will automatically alert the closest matching available specialist on dispatch submit.</p>
+              </div>
+            ) : (
+              <div className="space-y-2.5">
+                {rankedDocs.slice(0, 3).map(doc => (
+                  <div
+                    key={doc.id}
+                    onClick={() => setSelectedDoc(doc)}
+                    className={`p-3 border rounded-premium cursor-pointer transition-all flex justify-between items-center ${
+                      selectedDoc?.id === doc.id ? 'border-brand bg-brand-50/20 dark:bg-brand-900/10' : 'border-slate-200 dark:border-dark-border hover:border-slate-300'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-2.5">
+                      <img src={doc.avatar} alt={doc.name} className="w-8 h-8 rounded-full object-cover" />
+                      <div>
+                        <span className="font-bold text-slate-750 dark:text-slate-100 block">{doc.name}</span>
+                        <span className="text-[9px] text-slate-400">ETA: ~{doc.estimatedETA}m • Reliability: {doc.reliability.overall}%</span>
+                      </div>
+                    </div>
+                    <span className="font-black text-brand text-xs font-headline">{doc.matchScore}% Match</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* STEP 5: REVIEW & SUBMIT */}
+        {step === 5 && (
+          <div className="space-y-4 text-xs animate-fade-in text-left">
+            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Confirm Consultation Dispatch details</span>
+            
+            <div className="border border-slate-200 dark:border-dark-border rounded-premium p-4 space-y-2 bg-slate-50/30 dark:bg-slate-900/5 text-slate-650 dark:text-slate-300">
+              <div>Patient: <span className="font-bold text-slate-800 dark:text-white">{form.patientName} ({form.age}y/{form.gender})</span></div>
+              <div>Urgency Priority: <span className="font-bold uppercase text-brand">{form.priority}</span></div>
+              <div>Required Specialty: <span className="font-semibold">{form.specialty}</span></div>
+              {form.priority !== 'Emergency' && (
+                <div>Selected Specialist: <span className="font-bold text-slate-800 dark:text-white">{selectedDoc?.name || 'Any Available'}</span></div>
+              )}
+              {uploadedFiles.length > 0 && (
+                <div>Attachments: <span className="font-mono">{uploadedFiles.length} files</span></div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Navigation Button controls */}
+        <div className="flex justify-between items-center pt-4 border-t border-slate-100 dark:border-dark-border/40 mt-6">
+          <button
+            type="button"
+            disabled={step === 1}
+            onClick={handlePrev}
+            className="text-xs text-slate-450 disabled:opacity-40 font-bold hover:underline"
+          >
+            Back
+          </button>
+          
+          {step < 5 ? (
+            <button
+              type="button"
+              onClick={handleNext}
+              className="bg-brand text-white font-bold text-xs py-1.5 px-4 rounded shadow-sm hover:bg-brand-650 transition-colors"
+            >
+              Next Step
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={handleSubmit}
+              className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs py-1.5 px-5 rounded shadow-sm transition-colors"
+            >
+              Dispatch Request
+            </button>
+          )}
+        </div>
+
+      </div>
+
     </div>
   );
 };
+
 
 // 2. Settings Page
 export const SettingsPage = () => {
