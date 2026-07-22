@@ -386,66 +386,91 @@ export const RoleDashboardAmbulance = ({ activeSubTab }) => {
         </div>
       </div>
 
-      {/* KPI Cards Row (5 Cards) */}
+      {/* KPI Cards Row (5 Cards) - ALL INTERACTIVE */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3.5">
         
-        {/* KPI 1: Nearby Hospitals */}
-        <div className="bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border p-4 rounded-premium shadow-sm flex flex-col justify-between">
+        {/* KPI 1: Active Dispatches */}
+        <div 
+          onClick={() => {
+            addToast('Emergency Dispatches', 'Viewing 7 en-route ambulance dispatches.', 'info');
+          }}
+          className="bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border p-4 rounded-premium shadow-sm flex flex-col justify-between cursor-pointer hover:border-brand transition-all hover:scale-[1.02]"
+        >
           <div className="flex justify-between items-center">
-            <span className="text-[9px] text-slate-400 dark:text-slate-400 font-bold uppercase tracking-wider">Nearby Hospitals</span>
-            <span className="material-symbols-outlined text-brand text-lg">local_hospital</span>
+            <span className="text-[9px] text-slate-400 dark:text-slate-400 font-bold uppercase tracking-wider">Active Dispatches</span>
+            <span className="material-symbols-outlined text-brand text-lg">local_shipping</span>
           </div>
           <div className="mt-2">
-            <span className="text-2xl font-black text-slate-800 dark:text-white font-headline">12</span>
-            <span className="text-[10px] text-slate-400 block font-medium mt-0.5">Within 20 km radius</span>
+            <span className="text-2xl font-black text-brand font-headline">7</span>
+            <span className="text-[10px] text-brand block font-semibold mt-0.5 underline">En-route units ➔</span>
           </div>
         </div>
 
-        {/* KPI 2: Ready to Treat */}
-        <div className="bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border p-4 rounded-premium shadow-sm flex flex-col justify-between">
+        {/* KPI 2: Patients Transported */}
+        <div 
+          onClick={() => {
+            addToast('Transports Summary', '5 emergency transfers safely checked in today.', 'success');
+          }}
+          className="bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border p-4 rounded-premium shadow-sm flex flex-col justify-between cursor-pointer hover:border-emerald-500 transition-all hover:scale-[1.02]"
+        >
           <div className="flex justify-between items-center">
-            <span className="text-[9px] text-slate-400 dark:text-slate-400 font-bold uppercase tracking-wider">Ready to Treat</span>
+            <span className="text-[9px] text-slate-400 dark:text-slate-400 font-bold uppercase tracking-wider">Patients Transported</span>
             <span className="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>
           </div>
           <div className="mt-2">
-            <span className="text-2xl font-black text-slate-800 dark:text-white font-headline">7</span>
-            <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold block mt-0.5">Immediately Available</span>
+            <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400 font-headline">5</span>
+            <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold block mt-0.5 underline">Check-ins ➔</span>
           </div>
         </div>
 
-        {/* KPI 3: Critical Alerts */}
-        <div className="bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border p-4 rounded-premium shadow-sm flex flex-col justify-between">
+        {/* KPI 3: Average ETA */}
+        <div 
+          onClick={() => {
+            addToast('Commute ETA Matrix', 'Average transit delay: 11 mins.', 'info');
+          }}
+          className="bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border p-4 rounded-premium shadow-sm flex flex-col justify-between cursor-pointer hover:border-rose-500 transition-all hover:scale-[1.02]"
+        >
           <div className="flex justify-between items-center">
-            <span className="text-[9px] text-slate-400 dark:text-slate-400 font-bold uppercase tracking-wider">Critical Alerts</span>
-            <span className="material-symbols-outlined text-rose-500 text-lg animate-pulse">warning</span>
+            <span className="text-[9px] text-slate-400 dark:text-slate-400 font-bold uppercase tracking-wider">Average ETA</span>
+            <span className="material-symbols-outlined text-rose-500 text-lg animate-pulse">timer</span>
           </div>
           <div className="mt-2">
-            <span className="text-2xl font-black text-rose-600 dark:text-rose-400 font-headline">2</span>
-            <span className="text-[10px] text-rose-600 dark:text-rose-400 font-semibold block mt-0.5">MRI Offline / Tech Unavailable</span>
+            <span className="text-2xl font-black text-slate-800 dark:text-white font-headline">11 mins</span>
+            <span className="text-[10px] text-slate-400 font-medium block mt-0.5 underline">ETA Matrix ➔</span>
           </div>
         </div>
 
-        {/* KPI 4: Average Treatment Delay */}
-        <div className="bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border p-4 rounded-premium shadow-sm flex flex-col justify-between">
+        {/* KPI 4: Hospitals Contacted */}
+        <div 
+          onClick={() => {
+            addToast('Hospital Network', '4 regional trauma centers connected.', 'info');
+          }}
+          className="bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border p-4 rounded-premium shadow-sm flex flex-col justify-between cursor-pointer hover:border-amber-500 transition-all hover:scale-[1.02]"
+        >
           <div className="flex justify-between items-center">
-            <span className="text-[9px] text-slate-400 dark:text-slate-400 font-bold uppercase tracking-wider">Avg Treatment Delay</span>
-            <span className="material-symbols-outlined text-amber-500 text-lg">schedule</span>
+            <span className="text-[9px] text-slate-400 dark:text-slate-400 font-bold uppercase tracking-wider">Hospitals Contacted</span>
+            <span className="material-symbols-outlined text-amber-500 text-lg">domain</span>
           </div>
           <div className="mt-2">
-            <span className="text-2xl font-black text-slate-800 dark:text-white font-headline">18 mins</span>
-            <span className="text-[10px] text-slate-400 block font-medium mt-0.5">Across Nearby Hospitals</span>
+            <span className="text-2xl font-black text-slate-800 dark:text-white font-headline">4</span>
+            <span className="text-[10px] text-slate-400 block font-medium mt-0.5 underline">Trauma Nodes ➔</span>
           </div>
         </div>
 
-        {/* KPI 5: AI Confidence */}
-        <div className="bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border p-4 rounded-premium shadow-sm flex flex-col justify-between">
+        {/* KPI 5: AI Recommendation Score */}
+        <div 
+          onClick={() => {
+            openModal('ai_rationale', { recommendedName: 'SETU Ambulance Dispatch AI', reason: 'Calculates definitive care start times considering Cath Lab readiness, MRI technician shifts, and live traffic.' });
+          }}
+          className="bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border p-4 rounded-premium shadow-sm flex flex-col justify-between cursor-pointer hover:border-purple-500 transition-all hover:scale-[1.02]"
+        >
           <div className="flex justify-between items-center">
-            <span className="text-[9px] text-slate-400 dark:text-slate-400 font-bold uppercase tracking-wider">AI Confidence</span>
+            <span className="text-[9px] text-slate-400 dark:text-slate-400 font-bold uppercase tracking-wider">AI Match Score</span>
             <span className="material-symbols-outlined text-purple-500 text-lg">auto_awesome</span>
           </div>
           <div className="mt-2">
-            <span className="text-2xl font-black text-purple-600 dark:text-purple-400 font-headline">94%</span>
-            <span className="text-[10px] text-purple-600 dark:text-purple-400 font-semibold block mt-0.5">Recommendation Accuracy</span>
+            <span className="text-2xl font-black text-purple-600 dark:purple-400 font-headline">94%</span>
+            <span className="text-[10px] text-purple-600 dark:text-purple-400 font-semibold block mt-0.5 underline">Accuracy ➔</span>
           </div>
         </div>
 

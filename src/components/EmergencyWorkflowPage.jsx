@@ -250,7 +250,7 @@ export const EmergencyWorkflowPage = () => {
       docTab === 'completed' ? completedConsults : []; // Archived empty initially
 
     return (
-      <div className="max-w-4xl mx-auto space-y-6 animate-fade-in text-left">
+      <div className="w-full space-y-4 animate-fade-in text-left font-sans">
         
         {/* Title */}
         <div className="border-b pb-3.5 border-slate-200 dark:border-dark-border">
@@ -597,7 +597,7 @@ export const EmergencyWorkflowPage = () => {
   const isEmergencySOSActive = activeSOS && activeSOS.status !== 'Completed';
 
   return (
-    <div className="max-w-xl mx-auto space-y-6 animate-fade-in text-left">
+    <div className="w-full space-y-4 animate-fade-in text-left font-sans">
       
       {/* Title */}
       <div className="border-b pb-3.5 border-slate-200 dark:border-dark-border">

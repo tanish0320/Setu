@@ -10,7 +10,7 @@ export const Header = () => {
     activeSOS, cancelSOS,
     hospitals, selectedHospital,
     doctors, selectedDoctor,
-    setJudgeModeActive
+    setJudgeModeActive, openModal
   } = useApp();
 
   const getBreadcrumbs = () => {
@@ -196,10 +196,11 @@ export const Header = () => {
         </button>
 
         {/* Notifications Hub */}
-        <div ref={notifRef} className="relative">
+        <div className="relative">
           <button
-            onClick={() => setIsNotifOpen(!isNotifOpen)}
+            onClick={() => openModal('notification_center')}
             className="p-1.5 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors relative"
+            title="Open Notification Center"
           >
             <span className="material-symbols-outlined text-xl">notifications</span>
             {unreadCount > 0 && (

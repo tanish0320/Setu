@@ -41,6 +41,9 @@ import {
   AuditTrailPage
 } from './components/EnterprisePages';
 
+import { ToastContainer } from './components/ToastContainer';
+import { ModalDrawerCenter } from './components/ModalDrawerCenter';
+
 const DashboardLayout = () => {
   const { role, activePage, judgeModeActive, setJudgeModeActive } = useApp();
 
@@ -154,8 +157,8 @@ const DashboardLayout = () => {
         <Header />
 
         {/* Dynamic page container */}
-        <main className="flex-1 overflow-y-auto p-6 md:p-8">
-          <div className="max-w-[1400px] mx-auto">
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+          <div className="max-w-[1800px] mx-auto w-full">
             {renderPage()}
           </div>
         </main>
@@ -163,6 +166,12 @@ const DashboardLayout = () => {
 
       {/* Floating Demo Center Storyboard Console */}
       <DemoConsole />
+
+      {/* Global Toast Container */}
+      <ToastContainer />
+
+      {/* Global Modal & Drawer Manager */}
+      <ModalDrawerCenter />
     </div>
   );
 };

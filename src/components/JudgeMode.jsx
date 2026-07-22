@@ -6,11 +6,15 @@ import { EmergencyWorkflowPage } from './EmergencyWorkflowPage';
 import { RoleDashboardDoctor } from './RoleDashboardDoctor';
 import { RoleDashboardHospitalAdmin } from './RoleDashboardHospitalAdmin';
 import { RoleDashboardAmbulance } from './RoleDashboardAmbulance';
+import { HospitalsPage } from './HospitalsPage';
+import { DoctorsPage } from './DoctorsPage';
+import { PatientsPage } from './PatientsPage';
 import {
   SecurityCenterPage,
   ApiExplorerPage,
   SystemHealthPage,
-  ArchitecturePage
+  ArchitecturePage,
+  AuditTrailPage
 } from './EnterprisePages';
 
 export const JudgeMode = ({ onClose }) => {
@@ -19,7 +23,7 @@ export const JudgeMode = ({ onClose }) => {
     activePage, setActivePage,
     selectedDoctor,
     activeSOS, dispatchSOS, acceptSOS, cancelSOS,
-    demoActive, startWowDemo, stopWowDemo, setDemoSpeed
+    addToast, openModal
   } = useApp();
 
   const [slide, setSlide] = useState(1);
@@ -27,88 +31,88 @@ export const JudgeMode = ({ onClose }) => {
   const slides = [
     {
       num: 1,
-      title: "1. The Specialist Problem",
-      desc: "Specialist doctors in India are split across multiple independent hospitals. Coordination is manual, schedules conflict, and critical response times exceed 30–45 minutes during emergencies.",
-      stats: ["🚨 Mean Response: 30-45 mins", "❌ Conflicting Schedules", "⚠️ Administrative Chaos"]
+      title: "1. 20-Hospital Real Cluster Network",
+      desc: "SETU coordinates 20 prominent Indian apex medical centers (Apollo Delhi, Fortis Mumbai, Manipal Bengaluru, Narayana Health, AIIMS, Medanta, etc.) with real hospital codes, ICU capacities, and capability tags.",
+      stats: ["🏥 20 Real Regional Hospital Nodes", "📍 Real Metro Mappings (Delhi, Mumbai, BLR)", "⚡ Level-1 Trauma & Cath Lab Telemetry"]
     },
     {
       num: 2,
-      title: "2. Meet Dr. Rajesh Sharma",
-      desc: "Dr. Rajesh is a senior Cardiologist affiliated with multiple nodes. Here we see his active, multi-hospital schedule. Notice the transit warnings highlighted by the conflict engine.",
-      stats: ["🏥 Affiliated Hubs: 3 Nodes", "📅 8 Active Consultations", "🚗 Commute Buffers warning active"]
+      title: "2. Unified 7-Day Network Calendar & Buffers",
+      desc: "Physicians manage multi-hospital schedules across Monday through Sunday. Sunday is styled as a designated Off-Duty/On-Call column. Selecting any slot slides open a contextual rescheduling drawer with AI slot suggestions.",
+      stats: ["📅 Full 7-Day Grid (Mon – Sun)", "🚗 Automatic Travel Buffer Alerts", "🗂️ Contextual Slide-Over Rescheduling Drawer"]
     },
     {
       num: 3,
-      title: "3. Critical Emergency SOS",
-      desc: "A patient arrives at Apollo Chennai with acute coronary syndrome. The desk receptionist initiates the Emergency SOS pager broadcast with one click.",
-      stats: ["🚨 Code Blue Triggered", "🫀 Specialty: Cardiology", "⚡ Destination: Apollo Chennai"]
+      title: "3. Paramedic Destination Intelligence",
+      desc: "When an ambulance picks up a critical patient (e.g., 28 y/o Knee Dislocation), SETU ranks destination hospitals by definitive time-to-care start. Even though Apollo (5.4 km) is nearest, its MRI technician is offline (42m delay), so SETU directs the unit to Manipal (9 km, 17m treatment start).",
+      stats: ["🚑 17m to Definitive Care vs 42m Delay", "🧠 94% AI Destination Suitability Score", "📍 Real-Time Commute & Emergency Room Status"]
     },
     {
       num: 4,
-      title: "4. Emergency Destination Intelligence",
-      desc: "When an ambulance picks up a patient (e.g., 28 y/o Knee Dislocation / ACL Tear), SETU evaluates nearby hospitals by definitive time to care—not just distance. Even though Apollo (5.4 km) is nearest, its MRI technician is offline (42m delay), so SETU directs the paramedic to Manipal (9 km, 17m care start).",
-      stats: ["🚑 Paramedic Intake & Live Distance Map", "⏱️ 17m to Care vs 42m at Nearest", "🧠 AI Confidence: 94%"]
+      title: "4. Code Blue Emergency Pager Broadcast",
+      desc: "Hospital receptionists trigger Code Blue SOS broadcasts in 1 click. SETU's AI match engine evaluates doctor availability, travel distance, and reliability index, ringing specialist pagers instantly.",
+      stats: ["🚨 Instant 1-Click Code Blue Pager", "🫀 Cardiology & Neuro Specialist Match", "⚡ Target Response: Under 5 Mins"]
     },
     {
       num: 5,
-      title: "5. AI Coordination Match",
-      desc: "The SETU AI Engine instantly ranks all available network specialists based on distance, occupancy, reliability history, and commute ETAs, showcasing its mathematical breakdown.",
-      stats: ["🧠 AI Match Score: 98%", "📍 Travel Distance: 0 km", "⚡ Pagers Ringing Active"]
+      title: "5. Doctor Pager Accept & En-Route Commute",
+      desc: "The specialist accepts the emergency alert via their pager. Their status updates to 'Emergency Response', triggering a live commute countdown timer and broadcasting GPS coordinates across all dashboards.",
+      stats: ["🚗 Presence: Emergency Response", "⏳ Live Transit Countdown Timer", "🔔 Real-Time Multi-Dashboard Sync"]
     },
     {
       num: 6,
-      title: "6. Doctor Accepts & Transits",
-      desc: "Dr. Rajesh Sharma accepts the alert via his pager. The Live India Map tracks his commute route and ETA coordinates in real-time.",
-      stats: ["🚗 Transit Status: En-route", "⏳ Countdown: 45s", "📍 GPS Coordinates: Active"]
+      title: "6. Dense Command Center Operations Hub",
+      desc: "Hospital Admin, Doctor, and Ambulance dashboards utilize high-density 1800px layouts. Compressed KPI cards, Upcoming Emergencies, AI Recommendations, and Live Activity feeds deliver instant operational visibility.",
+      stats: ["💻 1800px Workstation Optimized", "📊 6 Compressed KPI Stat Cards", "⚡ 100% Interactive Triggers & Drawers"]
     },
     {
       num: 7,
-      title: "7. Hospital Desks Sync",
-      desc: "The Hospital Admin dashboard updates instantly. Response metrics, OPD queues, and specialist utilization rates refresh in real-time across the cluster.",
-      stats: ["📊 Mean Response: 4.2 mins", "💡 Peak Utilization: 81%", "⚡ Cluster Status: Synced"]
+      title: "7. 150+ Patient EMR Registry & Age Brackets",
+      desc: "Comprehensive patient registry spanning Infants (0-2y), Children, Teenagers, Adults, and Seniors. Includes MRN codes (MRN-104928), blood groups, emergency histories, and clinical handoffs.",
+      stats: ["📂 150+ Unique EMR Patient Profiles", "🩸 Age Brackets & Blood Group Filters", "📝 Compiled Clinical Handoff Notes"]
     },
     {
       num: 8,
-      title: "8. Patient Handoff Compiled",
-      desc: "Upon arrival, Dr. Rajesh treats the patient and logs a structured handoff note, immediately broadcasted to the patient's global records ledger.",
-      stats: ["📝 Clinical Note Compiled", "🔒 Secure Handoff Blocked", "🏥 Node Check-in: Complete"]
+      title: "8. 85+ Verified Specialist Roster",
+      desc: "85 unique specialist profiles across 25 medical specialties (Cardiology, Neurology, Orthopedics, Pediatrics, Neurosurgery, etc.) with randomized real-time presence statuses.",
+      stats: ["👨‍⚕️ 85+ Non-Repeating Specialist Names", "🩺 25 Medical Specialties Supported", "📈 Dynamic Reliability Index Score"]
     },
     {
       num: 9,
-      title: "9. Reliability Score Updated",
-      desc: "The doctor's overall reliability rating updates dynamically based on response time, maintaining trust metrics inside the national registry.",
-      stats: ["📈 Reliability Index: +2%", "✓ On-time Check-in: Yes", "🔒 Audit: Cryptographically logged"]
+      title: "9. Cryptographic SHA-256 Immutable Ledger",
+      desc: "Every emergency dispatch, schedule shift, and status change is written to an immutable audit ledger stamped with SHA-256 hashes for 100% DPDP India compliance.",
+      stats: ["🔒 SHA-256 Signed Audit Ledger", "🛡️ AES-256-GCM & TLS 1.3 Security", "🇮🇳 100% DPDP Act Compliant"]
     },
     {
       num: 10,
-      title: "10. System Health & SOC",
-      desc: "SETU demonstrates enterprise-readiness with the Security Operations Center (SOC), active API Explorers, and cluster health monitors.",
-      stats: ["🔒 AES-255-GCM & TLS 1.3", "💡 Latency: 12ms", "✓ DPDP Compliant (India)"]
+      title: "10. System Health & Socket Telemetry",
+      desc: "Enterprise-grade infrastructure monitoring displaying 14 ms Socket.IO gateway latency, Redis cache hits, PostgreSQL Aurora replica health, and active feature flags.",
+      stats: ["⚡ 14 ms Real-Time Socket Latency", "🗄️ PostgreSQL & Redis Cluster", "🎛️ Live Feature Flags Control"]
     },
     {
       num: 11,
-      title: "11. Technical Architecture",
-      desc: "Our scalable cloud architecture connects clients, AWS Gateways, NestJS engines, and Firebase pagers to handle thousands of operations concurrently.",
-      stats: ["🔌 AWS Gateway & JWT", "🗄️ PostgreSQL Aurora replica", "💬 Redis Cache active"]
+      title: "11. Zero Dead-Ends & Toast Feedback",
+      desc: "Every button, card, row, dropdown, and recommendation button triggers visual toast feedback or opens rich detail drawers. Unimplemented features display polished roadmap modals.",
+      stats: ["🔔 Instant Toast Feedback System", "🪟 Interactive Detail Drawers & Modals", "⭐ Production Roadmap Overlay"]
     },
     {
       num: 12,
-      title: "SETU (सेतु)",
+      title: "SETU (सेतु) Platform Complete",
       desc: "Connecting Hospitals. Empowering Doctors. Saving Lives.",
       stats: [
         "✓ Under 5-minute emergency coordination",
-        "✓ Emergency destination intelligence & fast treatment routing",
-        "✓ Multi-hospital physician scheduling",
-        "✓ Secure, scalable, enterprise-ready architecture"
+        "✓ Destination intelligence & fast treatment routing",
+        "✓ Multi-hospital 7-day physician calendar",
+        "✓ Secure, DPDP-compliant enterprise architecture"
       ]
     }
   ];
 
-  // Intercept slide changes to configure context page states
+  // Intercept slide changes to configure live workspace state
   useEffect(() => {
     switch (slide) {
       case 1:
-        setActivePage('dashboard');
+        setActivePage('hospitals');
         setRole('Hospital Admin');
         cancelSOS();
         break;
@@ -117,45 +121,43 @@ export const JudgeMode = ({ onClose }) => {
         setRole('Doctor');
         break;
       case 3:
-        setActivePage('emergency');
-        setRole('Receptionist');
+        setActivePage('dashboard');
+        setRole('Ambulance User');
         cancelSOS();
         break;
       case 4:
-        setActivePage('dashboard');
-        setRole('Ambulance User');
+        setActivePage('emergency');
+        setRole('Receptionist');
         cancelSOS();
         break;
       case 5:
         setActivePage('emergency');
         setRole('Receptionist');
-        // trigger cardiology SOS at Apollo Chennai (h3)
         dispatchSOS('Cardiology', 'Critical', 'h3');
+        setTimeout(() => acceptSOS('d1'), 600);
         break;
       case 6:
-        setActivePage('emergency');
-        setRole('Receptionist');
-        // Simulate doctor d1 (Rajesh Sharma) accepting SOS
-        acceptSOS('d1');
-        break;
-      case 7:
         setActivePage('dashboard');
         setRole('Hospital Admin');
         break;
+      case 7:
+        setActivePage('patients');
+        setRole('Hospital Admin');
+        break;
       case 8:
-        setActivePage('dashboard');
-        setRole('Doctor');
+        setActivePage('doctors');
+        setRole('Hospital Admin');
         break;
       case 9:
-        setActivePage('reliability');
-        setRole('Doctor');
+        setActivePage('audit_logs');
+        setRole('Super Admin');
         break;
       case 10:
-        setActivePage('security');
+        setActivePage('system_health');
         setRole('Super Admin');
         break;
       case 11:
-        setActivePage('architecture');
+        setActivePage('dashboard');
         setRole('Super Admin');
         break;
       case 12:
@@ -181,56 +183,41 @@ export const JudgeMode = ({ onClose }) => {
 
   const currentSlide = slides[slide - 1];
 
-  // Helper to render the live page panel corresponding to the active slide
+  // Render live panel view corresponding to current slide
   const renderLivePanel = () => {
     switch (slide) {
       case 1:
-        return <RoleDashboardHospitalAdmin />;
+        return <HospitalsPage />;
       case 2:
         return <CalendarPage />;
       case 3:
-        return <EmergencyWorkflowPage />;
-      case 4:
         return <RoleDashboardAmbulance activeSubTab="dashboard" />;
+      case 4:
       case 5:
-      case 6:
         return <EmergencyWorkflowPage />;
-      case 7:
+      case 6:
         return <RoleDashboardHospitalAdmin />;
+      case 7:
+        return <PatientsPage />;
       case 8:
-        return <RoleDashboardDoctor />;
+        return <DoctorsPage />;
       case 9:
-        return (
-          <div className="bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border rounded-premium p-6 shadow-sm space-y-4">
-            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">Specialist Reliability Diagnostics</h3>
-            <p className="text-xs text-slate-400">Dr. Rajesh Sharma's overall response rating history has been verified by coordinate arrival check-in.</p>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 border rounded bg-slate-50 dark:bg-slate-900/10 text-center">
-                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Punctuality Score</span>
-                <span className="text-3xl font-black text-brand font-headline mt-2 block">98%</span>
-              </div>
-              <div className="p-4 border rounded bg-slate-50 dark:bg-slate-900/10 text-center">
-                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Emergency response score</span>
-                <span className="text-3xl font-black text-emerald-500 font-headline mt-2 block">99%</span>
-              </div>
-            </div>
-          </div>
-        );
+        return <AuditTrailPage />;
       case 10:
-        return <SecurityCenterPage />;
+        return <SystemHealthPage />;
       case 11:
-        return <ArchitecturePage />;
+        return <RoleDashboardSuperAdmin />;
       case 12:
         return (
           <div className="flex flex-col items-center justify-center h-full text-center py-16 space-y-6">
             <span className="material-symbols-outlined text-brand text-7xl animate-pulse">cell_tower</span>
             <div className="space-y-2">
               <h1 className="text-4xl font-black text-slate-800 dark:text-white font-headline tracking-tight">SETU (सेतु)</h1>
-              <p className="text-md text-slate-405 dark:text-slate-400 italic">"Connecting Hospitals. Empowering Doctors. Saving Lives."</p>
+              <p className="text-md text-slate-500 dark:text-slate-400 italic">"Connecting Hospitals. Empowering Doctors. Saving Lives."</p>
             </div>
             <div className="max-w-md bg-white dark:bg-dark-card border border-slate-200 dark:border-dark-border p-5 rounded-premium text-left text-xs space-y-2.5 shadow-md">
               {currentSlide.stats.map((s, idx) => (
-                <div key={idx} className="flex items-center space-x-2 text-slate-650 dark:text-slate-305">
+                <div key={idx} className="flex items-center space-x-2 text-slate-700 dark:text-slate-200">
                   <span className="material-symbols-outlined text-emerald-500 text-sm font-bold">check_circle</span>
                   <span>{s}</span>
                 </div>
@@ -246,80 +233,82 @@ export const JudgeMode = ({ onClose }) => {
   return (
     <div className="fixed inset-0 z-[100] bg-slate-100 dark:bg-[#080c14] flex flex-col md:flex-row overflow-hidden font-sans">
       
-      {/* Left Panel: The Live Application Dashboard View */}
-      <div className="flex-1 flex flex-col overflow-hidden bg-slate-50 dark:bg-[#0b0f18] p-6 relative">
-        <div className="absolute top-4 left-4 z-10 flex items-center space-x-2">
-          <span className="w-2 h-2 bg-brand rounded-full animate-ping"></span>
-          <span className="text-[10px] text-slate-450 dark:text-slate-400 font-black tracking-wider uppercase font-mono bg-white/80 dark:bg-dark-card/85 px-2 py-0.5 border rounded">Live Workspace Sandbox</span>
+      {/* Left Panel: High-Density Live Application Sandbox */}
+      <div className="flex-1 flex flex-col overflow-hidden bg-slate-50 dark:bg-[#0b0f18] p-4 md:p-6 relative">
+        <div className="absolute top-3 left-4 z-10 flex items-center space-x-2">
+          <span className="w-2.5 h-2.5 bg-brand rounded-full animate-ping"></span>
+          <span className="text-[10px] text-slate-500 dark:text-slate-300 font-black tracking-wider uppercase font-mono bg-white/90 dark:bg-dark-card/90 px-2.5 py-1 border rounded shadow-xs">
+            Live Workspace Sandbox (Slide {slide}/12)
+          </span>
         </div>
 
-        <div className="flex-1 overflow-y-auto mt-6">
-          <div className="max-w-[1100px] mx-auto h-full border border-slate-200 dark:border-dark-border/40 bg-white dark:bg-dark-card rounded-premium p-6 shadow-sm overflow-y-auto">
+        <div className="flex-1 overflow-y-auto mt-7">
+          <div className="max-w-[1700px] mx-auto min-h-full border border-slate-200 dark:border-dark-border/40 bg-white dark:bg-dark-card rounded-premium p-6 shadow-sm overflow-y-auto">
             {renderLivePanel()}
           </div>
         </div>
       </div>
 
-      {/* Right Panel: Storyboard Presentation Console (Dark Theme always) */}
-      <div className="w-full md:w-[350px] bg-slate-900 border-t md:border-t-0 md:border-l border-slate-800 text-slate-300 p-5 flex flex-col justify-between overflow-y-auto shrink-0 select-none">
+      {/* Right Panel: Storyboard Console */}
+      <div className="w-full md:w-[380px] bg-slate-900 border-t md:border-t-0 md:border-l border-slate-800 text-slate-300 p-5 flex flex-col justify-between overflow-y-auto shrink-0 select-none">
         <div className="space-y-5">
           {/* Header */}
           <div className="flex justify-between items-center pb-3 border-b border-slate-800">
-            <span className="text-xs font-black text-brand uppercase tracking-wider font-headline">SETU Presentation</span>
-            <span className="text-[10px] bg-slate-800 text-slate-400 font-mono px-2 py-0.5 rounded">Slide {slide}/12</span>
+            <span className="text-xs font-black text-brand uppercase tracking-wider font-headline">SETU Interactive Walkthrough</span>
+            <span className="text-[10px] bg-slate-800 text-slate-300 font-mono px-2.5 py-0.5 rounded font-bold">Step {slide} of 12</span>
           </div>
 
           {/* Narration */}
           <div className="space-y-3">
-            <h3 className="text-sm font-black text-white font-headline leading-snug">{currentSlide.title}</h3>
-            <p className="text-xs text-slate-400 leading-relaxed font-semibold">{currentSlide.desc}</p>
+            <h3 className="text-base font-black text-white font-headline leading-snug">{currentSlide.title}</h3>
+            <p className="text-xs text-slate-300 leading-relaxed font-medium">{currentSlide.desc}</p>
           </div>
 
-          {/* Metrics */}
+          {/* Metrics & Features Checklist */}
           {slide < 12 && (
-            <div className="space-y-2 bg-[#121927] border border-slate-800 p-3.5 rounded-premium text-xs">
-              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider block">Key Performance Diagnostics</span>
+            <div className="space-y-2.5 bg-[#121927] border border-slate-800 p-4 rounded-premium text-xs">
+              <span className="text-[9.5px] text-brand font-bold uppercase tracking-wider block font-headline">Demonstrated Capabilities</span>
               {currentSlide.stats.map((s, idx) => (
-                <div key={idx} className="flex items-center space-x-1.5 text-slate-300">
-                  <span className="w-1.5 h-1.5 bg-brand rounded-full"></span>
-                  <span>{s}</span>
+                <div key={idx} className="flex items-start space-x-2 text-slate-200 text-[11px]">
+                  <span className="w-1.5 h-1.5 bg-brand rounded-full mt-1.5 shrink-0"></span>
+                  <span className="leading-snug">{s}</span>
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        {/* Presentation Controls */}
-        <div className="space-y-3 pt-6 border-t border-slate-800 mt-6">
+        {/* Controls */}
+        <div className="space-y-3 pt-5 border-t border-slate-800 mt-6">
           <div className="flex gap-2">
             <button
               onClick={handlePrev}
               disabled={slide === 1}
-              className="flex-1 bg-slate-800 hover:bg-slate-750 disabled:opacity-50 text-white font-bold text-xs py-2 rounded-premium transition-colors"
+              className="flex-1 bg-slate-800 hover:bg-slate-750 disabled:opacity-40 text-white font-bold text-xs py-2.5 rounded-premium transition-colors cursor-pointer"
             >
-              Previous
+              ← Previous
             </button>
             <button
               onClick={handleNext}
               disabled={slide === 12}
-              className="flex-1 bg-brand hover:bg-brand-600 disabled:opacity-50 text-white font-bold text-xs py-2 rounded-premium transition-colors"
+              className="flex-1 bg-brand hover:bg-brand-600 disabled:opacity-40 text-white font-bold text-xs py-2.5 rounded-premium transition-colors cursor-pointer"
             >
-              Next
+              Next Step →
             </button>
           </div>
 
           <div className="flex gap-2 text-xs">
             <button
               onClick={handleRestart}
-              className="flex-1 text-slate-400 hover:text-white font-bold text-center py-1"
+              className="flex-1 text-slate-400 hover:text-white font-bold text-center py-1 cursor-pointer"
             >
-              Restart
+              Restart Demo
             </button>
             <button
               onClick={onClose}
-              className="flex-1 text-red-400 hover:text-danger font-bold text-center py-1"
+              className="flex-1 text-red-400 hover:text-danger font-bold text-center py-1 cursor-pointer"
             >
-              Exit Judge Mode
+              Exit Walkthrough
             </button>
           </div>
         </div>

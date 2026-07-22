@@ -9,15 +9,16 @@ export const DemoConsole = () => {
     demoSpeed, setDemoSpeed,
     demoPaused, setDemoPaused,
     startWowDemo, stopWowDemo,
-    stepForward, stepBackward
+    stepForward, stepBackward,
+    setJudgeModeActive
   } = useApp();
 
   if (!demoActive) {
     return (
       <div className="fixed bottom-6 right-6 z-50">
         <button
-          onClick={startWowDemo}
-          className="bg-brand hover:bg-brand-600 text-white font-bold text-xs px-4 py-2.5 rounded-full shadow-lg shadow-brand-500/25 flex items-center space-x-2 animate-bounce font-headline"
+          onClick={() => setJudgeModeActive(true)}
+          className="bg-brand hover:bg-brand-600 text-white font-bold text-xs px-4 py-2.5 rounded-full shadow-lg shadow-brand-500/25 flex items-center space-x-2 animate-bounce font-headline cursor-pointer"
         >
           <span className="material-symbols-outlined text-sm">play_arrow</span>
           <span>LAUNCH INTERACTIVE DEMO STORY</span>

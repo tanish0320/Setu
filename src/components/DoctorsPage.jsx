@@ -1,25 +1,28 @@
 import React, { useState } from 'react';
-import { useApp } from '../context/AppContext';
+import { useApp, ALL_SPECIALTIES } from '../context/AppContext';
 
 export const DoctorsPage = () => {
   const { doctors, hospitals, setActivePage, setSelectedProfileDoctorId } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSpecialty, setSelectedSpecialty] = useState('All');
+  const [selectedStatus, setSelectedStatus] = useState('All');
 
-  const specialtiesList = ['All', 'Cardiology', 'Neurology', 'Orthopedics', 'Pediatrics', 'General Surgery'];
+  const specialtiesList = ['All', ...ALL_SPECIALTIES];
+  const statusesList = ['All', 'Available', 'Busy', 'In Surgery', 'On Call', 'Travelling', 'Emergency Response', 'Consultation', 'Off Duty', 'Break'];
 
   const getHospitalName = (hospId) => {
     return hospitals.find(h => h.id === hospId)?.shortName || 'Offline';
   };
 
   const filteredDoctors = doctors.filter(doc => {
-    const matchesSearch = doc.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = doc.name.toLowerCase().includes(searchQuery.toLowerCase()) || doc.specialty.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesSpecialty = selectedSpecialty === 'All' || doc.specialty === selectedSpecialty;
-    return matchesSearch && matchesSpecialty;
+    const matchesStatus = selectedStatus === 'All' || doc.status === selectedStatus;
+    return matchesSearch && matchesSpecialty && matchesStatus;
   });
 
   return (
-    <div className="max-w-4xl mx-auto py-6 space-y-6 text-left animate-fade-in">
+    <div className="w-full py-4 space-y-4 text-left animate-fade-in font-sans">
       
       {/* Title */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-200 dark:border-dark-border pb-4 gap-3">
@@ -31,11 +34,11 @@ export const DoctorsPage = () => {
         </div>
 
         {/* Filter controls */}
-        <div className="flex items-center space-x-2 text-xs">
+        <div className="flex flex-wrap items-center gap-2 text-xs">
           <input
             type="text"
             className="bg-white dark:bg-dark-card border border-slate-205 dark:border-dark-border rounded px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-brand font-medium w-44"
-            placeholder="Search by name..."
+            placeholder="Search name or specialty..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -46,6 +49,16 @@ export const DoctorsPage = () => {
           >
             {specialtiesList.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
+          <select
+            className="bg-white dark:bg-dark-card border border-slate-205 dark:border-dark-border rounded px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-brand font-medium text-slate-700 dark:text-slate-200"
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value)}
+          >
+            {statusesList.map(st => <option key={st} value={st}>{st}</option>)}
+          </select>
+          <span className="text-[10px] bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded font-bold text-slate-500 font-mono">
+            {filteredDoctors.length} Doctors
+          </span>
         </div>
       </div>
 

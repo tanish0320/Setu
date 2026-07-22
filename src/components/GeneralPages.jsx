@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useApp } from '../context/AppContext';
+import { useApp, ALL_SPECIALTIES } from '../context/AppContext';
 import { BarChart } from './SvgCharts';
 
 // 1. New Consultation Wizard Page (V3 Redesign)
@@ -41,7 +41,7 @@ export const AppointmentsPage = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [selectedDoc, setSelectedDoc] = useState(null);
 
-  const specialties = ['Cardiology', 'Neurology', 'Orthopedics', 'Pediatrics', 'General Surgery'];
+  const specialties = ALL_SPECIALTIES;
 
   // Match calculations
   const calculateRecommendations = () => {
